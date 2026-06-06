@@ -83,16 +83,20 @@ function RemovePost(index) {
     localStorage.setItem("SavedUsers", JSON.stringify(User));
     localStorage.setItem("SavedIds", JSON.stringify(idText));
 }
-function DrawPost(name,post,id) {
-document.getElementById("Draw").innerHTML = "";
+function DrawPost(name, post, id) {
+    document.getElementById("Draw").innerHTML = "";
     for (let i = 0; i < Post.length; i++) {
         document.getElementById("Draw").innerHTML += `
-        <div style="background-color:white; display: block; width: 400px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
+        <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px;">
+            
+            <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
+                <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>  
+                <span style=" font-size: 13px; color: gray;">ID:${i}</span>
+            </div>
+
             <h3>${User[i]}:</h3>
             ${Post[i]}
-            <span style="position: relative; right: -110px; top: -70px;">ID:${i}</span>
-            <button onclick="Copy(${i});" style="position: relative; right: 55px; top: -70px; width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
-            <button onclick="CheckCode(${i});" style="position: relative; right: 55px; top: -70px; width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>  
         </div>
         `;
     }
