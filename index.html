@@ -27,7 +27,7 @@ let Post = localStorage.getItem("SavedPosts") ? JSON.parse(localStorage.getItem(
 let User = localStorage.getItem("SavedUsers") ? JSON.parse(localStorage.getItem("SavedUsers")) : [];
 let idText = localStorage.getItem("SavedIds") ? JSON.parse(localStorage.getItem("SavedIds")) : [];
 let PostIndex = [];
-let PostIndexVAR = 0;
+let PostIndexVAR = Post.length;
 DrawPost()         
 function AddPost(name, post, id) {
     if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput2").value.trim() !== "" && document.getElementById("myInput").value.trim() !== "") {
@@ -112,7 +112,7 @@ navigator.clipboard.writeText(copied)
 }
 function CheckCode(index) {
 let Code = prompt("Please enter the Code:");
-if (btoa(Code === "JTEzMTEl") {
+if (btoa(Code) === "JTEzMTEl") {
 RemovePost(index)
 }else {
 alert("Wrong Code")
