@@ -34,8 +34,8 @@ function AddPost(name, post, id) {
     let words = post.split(" ")
     for (let i = 0; i < words.length; i++) {
         if (words[i].includes(".png")) {
-            words[i] = `<img src="${words[i]}" style="max-width: 100%; height: auto; border-radius: 4px;">`;
-        }
+        words[i] = `<img src="${words[i]}" style="max-width: 100%; height: auto; border-radius: 4px;">`.replace(/"/g, "'");
+}
     }
     
     post = words.join(" ");
