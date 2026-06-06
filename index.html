@@ -106,7 +106,7 @@ document.getElementById("Draw2").innerHTML = "";
 document.getElementById("SerachInput").value = "";
 }
 function Copy(copied) {
-navigator.clipboard.writeText(Post[index])
+navigator.clipboard.writeText(Post[copied])
         .then(() => alert("Text successfully copied!"))
         .catch(err => console.error("Could not copy: ", err));
 }
