@@ -145,9 +145,10 @@
 
             window.DrawPost = function(name, post, id) {
                 document.getElementById("Draw").innerHTML = "";
+                let visualID = 0;
                 for (let i = 0; i < Post.length; i++) {
                     if (idText[i] == "%Flagged%") {
-
+                        continue
                     }else {
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px;">
@@ -155,12 +156,13 @@
                             <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
                             <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
                             <button onclick="CheckFlagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚩</button>
-                            <span style=" font-size: 13px; color: gray;">ID:${i}</span>
+                            <span style=" font-size: 13px; color: gray;">ID:${visualID}</span>
                         </div>
                         <h3>${User[i]}:</h3>
                         ${Post[i]}
                     </div>
                     `;
+                        visualID++
                 }
                 }
             }
