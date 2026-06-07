@@ -2,7 +2,7 @@
 <html>
     <body style="background-color: powderblue;"> 
         <title>MakeCodeDataBase</title>  
-        <button onclick=" AddPost(document.getElementById('myInput2').value,document.getElementById('myInput').value,document.getElementById('myInput3').value);" style="position: absolute; right: 150px; width: 120px; height: 50px; Font-Size:25px; background-color:gray; color:white; border-radius:5px;">Add Post</button>      
+        <button onclick="AddPost(document.getElementById('myInput2').value,document.getElementById('myInput').value,document.getElementById('myInput3').value);" style="position: absolute; right: 150px; width: 120px; height: 50px; Font-Size:25px; background-color:gray; color:white; border-radius:5px;">Add Post</button>      
         <h1>What Would You Like To Post Today</h1>
         <textarea rows="5" cols="40"; style="position: absolute; right: 50px"; id="myInput"></textarea>
          <textarea rows="3" cols="40"; style="position: absolute; right: 50px; bottom: 90px;" id="myInput2"></textarea>
@@ -14,110 +14,153 @@
         <button onclick="getChoice(document.getElementById('SearchInput').value);" style="position: absolute; right: 510px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Search</button>
         <button onclick="ClearText();" style="position: absolute; right: 665px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>  
         
-<div id="Draw">
+        <div id="Draw"></div>
+        <div style="position: absolute; right: 450px; top: 80px;" id="Draw2"></div>
 
-</div>
-<div style="position: absolute; right: 450px; top: 80px;" id="Draw2">
+        <script type="module">   
+            "use strict";
 
-</div>
+            // 1. Core Firebase Cloud Drivers
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        <script>   
-"use strict";
-let Post = localStorage.getItem("SavedPosts") ? JSON.parse(localStorage.getItem("SavedPosts")) : [];
-let User = localStorage.getItem("SavedUsers") ? JSON.parse(localStorage.getItem("SavedUsers")) : [];
-let idText = localStorage.getItem("SavedIds") ? JSON.parse(localStorage.getItem("SavedIds")) : [];
-let PostIndex = [];
-let PostIndexVAR = Post.length;
-DrawPost()         
-function AddPost(name, post, id) {
-    if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput2").value.trim() !== "" && document.getElementById("myInput").value.trim() !== "") {
-    let words = post.split(" ")
-    for (let i = 0; i < words.length; i++) {
-        if (words[i].includes(".png")) {
-        words[i] = `<img src="${words[i]}" style="max-width: 100%; height: auto; border-radius: 4px;">`;
-}
-    }
-    
-    post = words.join(" ");
-    Post.push(post);
-    User.push(name);
-    idText.push(id);
-    PostIndex.push(PostIndexVAR);
-    PostIndexVAR += 1;
-    DrawPost()
+            // 2. Your Database Configuration Credentials
+            const firebaseConfig = {
+                apiKey: "AIzaSyDbpPmy2UaNWw5KEFN4liToGjQRbJgkT6Y",
+                authDomain: "makecodedatabase.firebaseapp.com",
+                projectId: "makecodedatabase",
+                storageBucket: "makecodedatabase.firebasestorage.app",
+                messagingSenderId: "755171220002",
+                appId: "1:755171220002:web:5c2c8a371e472e6363087b"
+            };
 
-    localStorage.setItem("SavedPosts", JSON.stringify(Post));
-    localStorage.setItem("SavedUsers", JSON.stringify(User));
-    localStorage.setItem("SavedIds", JSON.stringify(idText));
-        }
-}
-function getChoice(Choice) {
-    document.getElementById("Draw2").innerHTML = "";
-    for (let i = 0; i < idText.length; i++) {
-        if (idText[i] == Choice || idText[i].includes(Choice)) {
-            document.getElementById("Draw2").innerHTML += `
-        <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
-            <h3>${User[i]}:</h3>
-            <p>${Post[i]}</p>
-            <span>${idText[i]}</span>
-        </div>
-        `;
-            continue;
-        }
-        else if (idText[i] !== Choice || !idText[i].includes(Choice)) {
-            continue;
-        }
-    }
-}
-function RemovePost(index) {
-    Post.splice(index, 1);
-    User.splice(index, 1);
-    idText.splice(index, 1);
-    PostIndex.splice(index, 1);
-    for (let i = index; i < PostIndex.length; i++) {
-        PostIndex[i] -= 1;
-    }
-    DrawPost()
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
 
-    localStorage.setItem("SavedPosts", JSON.stringify(Post));
-    localStorage.setItem("SavedUsers", JSON.stringify(User));
-    localStorage.setItem("SavedIds", JSON.stringify(idText));
-}
-function DrawPost(name, post, id) {
-    document.getElementById("Draw").innerHTML = "";
-    for (let i = 0; i < Post.length; i++) {
-        document.getElementById("Draw").innerHTML += `
-        <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px;">
-            
-            <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
-                <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>  
-                <span style=" font-size: 13px; color: gray;">ID:${i}</span>
-            </div>
+            // 3. Your Arrays
+            let Post = [];
+            let User = [];
+            let idText = [];
+            let PostIndex = [];
+            let PostIndexVAR = 0;
 
-            <h3>${User[i]}:</h3>
-            ${Post[i]}
-        </div>
-        `;
-    }
-}
-function ClearText() {
-document.getElementById("Draw2").innerHTML = "";
-document.getElementById("SerachInput").value = "";
-}
-function Copy(copied) {
-navigator.clipboard.writeText(Post[copied])
-        .then(() => alert("Text successfully copied!"))
-        .catch(err => console.error("Could not copy: ", err));
-}
-function CheckCode(index) {
-let Code = prompt("Please enter the Code:");
-if (btoa(Code) === "JTEzMTEl") {
-RemovePost(index)
-}else {
-alert("Wrong Code")
-}
-}
+            // 4. Cloud Intermediary Engines
+            async function LoadFromCloud() {
+                const docSnap = await getDoc(doc(db, "MakeCode", "SavedData"));
+                if (docSnap.exists()) {
+                    let data = docSnap.data();
+                    Post = data.Post || [];
+                    User = data.User || [];
+                    idText = data.idText || [];
+                    PostIndexVAR = Post.length;
+                }
+                window.DrawPost(); 
+            }
+
+            async function SaveToCloud() {
+                await setDoc(doc(db, "MakeCode", "SavedData"), {
+                    Post: Post,
+                    User: User,
+                    idText: idText
+                });
+            }
+
+            // Fire download sequence when the document mounts
+            LoadFromCloud();
+
+            // 5. App Operational Logic (Unchanged Structure)
+            window.AddPost = async function(name, post, id) {
+                if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput2").value.trim() !== "" && document.getElementById("myInput").value.trim() !== "") {
+                    let words = post.split(" ");
+                    for (let i = 0; i < words.length; i++) {
+                        if (words[i].includes(".png")) {
+                            words[i] = `<img src="${words[i]}" style="max-width: 100%; height: auto; border-radius: 4px;">`;
+                        }
+                    }
+                    
+                    post = words.join(" ");
+                    Post.push(post);
+                    User.push(name);
+                    idText.push(id);
+                    PostIndex.push(PostIndexVAR);
+                    PostIndexVAR += 1;
+                    window.DrawPost();
+
+                    await SaveToCloud();
+                }
+            }
+
+            window.getChoice = function(Choice) {
+                document.getElementById("Draw2").innerHTML = "";
+                for (let i = 0; i < idText.length; i++) {
+                    if (idText[i] == Choice || idText[i].includes(Choice)) {
+                        document.getElementById("Draw2").innerHTML += `
+                        <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
+                            <h3>${User[i]}:</h3>
+                            <p>${Post[i]}</p>
+                            <span>${idText[i]}</span>
+                        </div>
+                        `;
+                        continue;
+                    }
+                    else if (idText[i] !== Choice || !idText[i].includes(Choice)) {
+                        continue;
+                    }
+                }
+            }
+
+            window.RemovePost = async function(index) {
+                Post.splice(index, 1);
+                User.splice(index, 1);
+                idText.splice(index, 1);
+                PostIndex.splice(index, 1);
+                for (let i = index; i < PostIndex.length; i++) {
+                    PostIndex[i] -= 1;
+                }
+                window.DrawPost();
+
+                await SaveToCloud();
+            }
+
+            window.DrawPost = function(name, post, id) {
+                document.getElementById("Draw").innerHTML = "";
+                for (let i = 0; i < Post.length; i++) {
+                    document.getElementById("Draw").innerHTML += `
+                    <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
+                            <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>  
+                            <span style=" font-size: 13px; color: gray;">ID:${i}</span>
+                        </div>
+                        <h3>${User[i]}:</h3>
+                        ${Post[i]}
+                    </div>
+                    `;
+                }
+            }
+
+            window.ClearText = function() {
+                document.getElementById("Draw2").innerHTML = "";
+                document.getElementById("SearchInput").value = "";
+            }
+
+            window.Copy = function(copied) {
+                navigator.clipboard.writeText(Post[copied])
+                    .then(() => alert("Text successfully copied!"))
+                    .catch(err => console.error("Could not copy: ", err));
+            }
+
+            window.CheckCode = function(index) {
+                let Code = prompt("Please enter the Code:");
+                if (btoa(Code) === "JTEzMTEl") {
+                    window.RemovePost(index);
+                } else {
+                    alert("Wrong Code");
+                }
+            }
+        </script>
+    </body>
+</html>
         </script>
     </body>
 </html>
