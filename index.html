@@ -50,6 +50,7 @@
             let FlaggedReason = [];
             let Likes = [];
             let Dates = [];
+            let Blocked = [];
             let savedName = localStorage.getItem("dbUsername");
             document.getElementById("myInput2").value = savedName || "";
             
@@ -65,6 +66,7 @@
                     FlaggedReason = data.FlaggedReason || [];
                     Likes = typeof data.Likes === "string" ? JSON.parse(data.Likes) : (data.Likes || []);
                     Dates = data.Dates || [];
+                    Blocked = data.Blocked || [];
                     PostIndexVAR = Post.length;
                     console.log("Dates currently loaded from cloud:", Dates);
                 }
@@ -82,6 +84,7 @@
                     FlaggedReason: FlaggedReason,
                     Likes: JSON.stringify(Likes),
                     Dates: Dates,
+                    Blocked: Blocked,
                 });
             }
 
@@ -90,6 +93,10 @@
 
             // 5. App Operational Logic (Unchanged Structure)
             window.AddPost = async function(name, post, id) {
+                if (Blocked.includes(name)) {
+                alert("You have been Blocked by a mod");
+                 return
+                }
                 if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput3").value.trim() !== "") {
                     
                     let currentSavedName = localStorage.getItem("dbUsername");
@@ -177,13 +184,15 @@
                         continue
                     }else {
                     document.getElementById("Draw").innerHTML += `
-                    <div style="background-color:white; display: block; width: 400px; padding: 25px; border-radius:5px; margin-bottom: 15px;">
+                    <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 120px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
                             <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
                             <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
                             <button onclick="CheckFlagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚩</button>
                             <button onclick="CheckName(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">↺Name</button>
                             <button onclick="AddLike(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">👍</button>
+                            <button onclick="CheckBlock(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚫</button>
+                            <button onclick="CheckUnBlock(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🔓</button>
                             <span style=" font-size: 13px; color: gray;">ID:${visualID}</span>
                             <span style=" font-size: 13px; color: gray;">Likes:${(Likes[i] || []).length}</span>
                             <span style=" font-size: 13px; color: gray;">Date:${(Dates[i] || "No Date")}</span>
@@ -288,6 +297,41 @@
             }
             window.DrawPost();
             await SaveToCloud();
+            }
+            window.Block = async function(index) {
+            let oldName = User[index]; 
+            Blocked.push(oldName)
+            window.DrawPost();
+            await SaveToCloud();
+            }
+            window.UnBlock = async function(index) {
+            let nameToUnblock = User[index]; 
+            let blockIndex = Blocked.indexOf(nameToUnblock);
+                
+            if (blockIndex !== -1) {
+            Blocked.splice(blockIndex, 1);
+            alert(nameToUnblock + " has been unblocked.");
+            window.DrawPost();
+            await SaveToCloud();
+            } else {
+               alert("This user is not currently blocked.");
+            }
+            }
+            window.CheckBlock = async function(index) {
+                let Code = prompt("Please enter the code:");
+                if (btoa(Code) === "JTEzMTEl") {
+                    window.Block(index);
+                } else {
+                    alert("Wrong Code");
+                }
+            }
+            window.CheckUnBlock = async function(index) {
+                let Code = prompt("Please enter the code:");
+                if (btoa(Code) === "JTEzMTEl") {
+                    window.UnBlock(index);
+                } else {
+                    alert("Wrong Code");
+                }
             }
         </script>
     </body>
