@@ -258,58 +258,33 @@
                 }
             }
             window.RemoveSavedName = async function(index) {
-    let Ask = prompt("Do You want this post type 1 or all post type 2");
-    
-    if (Ask === "1") {
-        let NewName = prompt("Please enter the New Name:");
-        if (NewName === null || NewName.trim() === "") return;
-        NewName = NewName.trim(); 
-
-        if (User[index] === NewName) {
-            alert("This post is already using that name!");
-            return;
-        }
-
-        if (User.includes(NewName)) {
-            alert("This name is already claimed by someone else globally! Please choose a different name.");
-            return; 
-        }
-        
-        User[index] = NewName; 
-        window.DrawPost();
-        await SaveToCloud();
-        alert("Name updated successfully!");
-        
-    } else if (Ask === "2") {
-        let oldName = User[index]; 
-        let NewName = prompt("Please enter the New Name:");
-        if (NewName === null || NewName.trim() === "") return;
-        NewName = NewName.trim(); 
-
-        if (oldName === NewName) {
-            alert("This user is already using that name!");
-            return;
-        }
-
-        if (User.includes(NewName)) {
-            alert("This name is already claimed by someone else globally! Please choose a different name.");
-            return; 
-        }
-        
-        if (localStorage.getItem("dbUsername") === oldName) {
-            localStorage.setItem("dbUsername", NewName);
-        }
-        
-        for (let i = 0; i < User.length; i++) {
-            if (User[i] === oldName) {
-                User[i] = NewName;
+            let Ask = prompt("Do You want this post type 1 or all post type 2")
+                if (Ask === "1") {
+            let NewName = prompt("Please enter the New Name:");
+            if (NewName !== null && NewName.trim() !== "") {
+            User[index] = NewName; 
+            window.DrawPost();
+            await SaveToCloud();
+            alert("Name updated successfully!");
+                }
+            } else if (Ask === "2") {
+                let oldName = User[index]; 
+                let NewName = prompt("Please enter the New Name:");
+              if (localStorage.getItem("dbUsername") === oldName) {
+                  localStorage.setItem("dbUsername", NewName);
+              }
+              if (NewName !== null && NewName.trim() !== "") {  
+              for (let i = 0; i < User.length; i++) {
+                  if (User[i] === oldName) {
+                      User[i] = NewName
+               }
+               }
+               window.DrawPost();
+               await SaveToCloud();
+                alert("All posts by " + oldName + " are now updated to " + NewName);
             }
-        }
-        window.DrawPost();
-        await SaveToCloud();
-        alert("All posts by " + oldName + " are now updated to " + NewName);
-    }
-}
+            }
+            }
             window.AddLike = async function(index) {
             if (!Likes[index]) {
             Likes[index] = [];
