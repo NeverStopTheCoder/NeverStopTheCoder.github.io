@@ -87,8 +87,8 @@
                     let currentSavedName = localStorage.getItem("dbUsername");
         if (currentSavedName !== name && User.includes(name)) {
             alert("This name is already claimed by someone else globally! Please choose a different name.");
-            return;
-        }      
+            return; 
+        }
                     localStorage.setItem("dbUsername", name);
                     let words = post.split(" ");
                     for (let i = 0; i < words.length; i++) {
@@ -170,6 +170,7 @@
                             <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
                             <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
                             <button onclick="CheckFlagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚩</button>
+                            <button onclick="CheckName(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">↺Name</button>
                             <span style=" font-size: 13px; color: gray;">ID:${visualID}</span>
                         </div>
                         <h3>${User[i]}:</h3>
@@ -201,7 +202,7 @@
                 }
             }
             window.CheckFlagCode = async function(index) {
-                let Reason = prompt("Please enter the the reason why you want this post flagged:");
+                let Reason = prompt("Please enter the reason why you want this post flagged:");
                 if (Reason === null) {
                 alert("Nothing Typed")
                 } else if (Reason.trim() === "") {
@@ -222,6 +223,42 @@
             document.getElementById("Name").innerText = "Locked " + savedName;
             document.getElementById("Name").style.color = "black";
             document.getElementById("Name").style.right = "20px";
+            }
+            }
+            window.CheckName = async function(index) {
+                let Code = prompt("Please enter the code:");
+                if (btoa(Code) === "JTEzMTEl") {
+                    window.RemoveSavedName(index);
+                } else {
+                    alert("Wrong Code");
+                }
+            }
+            window.RemoveSavedName = async function(index) {
+            let Ask = prompt("Do You want this post type 1 or all post type 2")
+                if (Ask === "1") {
+            let NewName = prompt("Please enter the New Name:");
+            if (NewName !== null && NewName.trim() !== "") {
+            User[index] = NewName; 
+            window.DrawPost();
+            await SaveToCloud();
+            alert("Name updated successfully!");
+                }
+            } else if (Ask === "2") {
+                let oldName = User[index]; 
+                let NewName = prompt("Please enter the New Name:");
+              if (localStorage.getItem("dbUsername") === oldName) {
+                  localStorage.setItem("dbUsername", NewName);
+              }
+              if (NewName !== null && NewName.trim() !== "") {  
+              for (let i = 0; i < User.length; i++) {
+                  if (User[i] === oldName) {
+                      User[i] = NewName
+               }
+               }
+               window.DrawPost();
+               await SaveToCloud();
+                alert("All posts by " + oldName + " are now updated to " + NewName);
+            }
             }
             }
         </script>
