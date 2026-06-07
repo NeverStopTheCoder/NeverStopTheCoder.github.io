@@ -43,6 +43,8 @@
             let idText = [];
             let PostIndex = [];
             let PostIndexVAR = 0;
+            let FlaggedPost = [];
+            let FlaggedReason = [];
 
             // 4. Cloud Intermediary Engines
             async function LoadFromCloud() {
@@ -52,6 +54,8 @@
                     Post = data.Post || [];
                     User = data.User || [];
                     idText = data.idText || [];
+                    FlaggedPost = data.FlaggedPost || [];
+                    FlaggedReason = data.FlaggedReason || [];
                     PostIndexVAR = Post.length;
                 }
                 window.DrawPost(); 
@@ -61,7 +65,9 @@
                 await setDoc(doc(db, "MakeCode", "SavedData"), {
                     Post: Post,
                     User: User,
-                    idText: idText
+                    idText: idText,
+                    FlaggedPost: FlaggedPost,
+                    FlaggedReason: FlaggedReason,
                 });
             }
 
@@ -70,7 +76,7 @@
 
             // 5. App Operational Logic (Unchanged Structure)
             window.AddPost = async function(name, post, id) {
-                if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput2").value.trim() !== "" && document.getElementById("myInput").value.trim() !== "") {
+                if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput2").value.trim() !== "" && document.getElementById("myInput3").value.trim() !== "") {
                     let words = post.split(" ");
                     for (let i = 0; i < words.length; i++) {
                         if (words[i].includes(".png")) {
@@ -92,8 +98,22 @@
 
             window.getChoice = function(Choice) {
                 document.getElementById("Draw2").innerHTML = "";
+                 if (Choice == "") {
+                    alert("Type Something")
+                     return
+                    }
                 for (let i = 0; i < idText.length; i++) {
-                    if (idText[i] == Choice || idText[i].includes(Choice)) {
+                      if (Choice == "%Flagged%" && idText[i] == "%Flagged%") {
+                        document.getElementById("Draw2").innerHTML += `
+                        <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
+                            <h3>${User[i]}:</h3>
+                            <p>${FlaggedReason[FlaggedPost.indexOf(Post[i]) ]}</p>
+                            <span>${idText[i]}</span>
+                            <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
+                        </div>
+                        `;
+                        continue;
+                    }else if (idText[i] == Choice || idText[i].includes(Choice)) {
                         document.getElementById("Draw2").innerHTML += `
                         <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
                             <h3>${User[i]}:</h3>
@@ -118,6 +138,7 @@
                     PostIndex[i] -= 1;
                 }
                 window.DrawPost();
+                document.getElementById("Draw2").innerHTML = "";
 
                 await SaveToCloud();
             }
@@ -125,17 +146,22 @@
             window.DrawPost = function(name, post, id) {
                 document.getElementById("Draw").innerHTML = "";
                 for (let i = 0; i < Post.length; i++) {
+                    if (idText[i] == "%Flagged%") {
+
+                    }else {
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px;">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
                             <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
-                            <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>  
+                            <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
+                            <button onclick="CheckFlagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚩</button>
                             <span style=" font-size: 13px; color: gray;">ID:${i}</span>
                         </div>
                         <h3>${User[i]}:</h3>
                         ${Post[i]}
                     </div>
                     `;
+                }
                 }
             }
 
@@ -158,9 +184,21 @@
                     alert("Wrong Code");
                 }
             }
-        </script>
-    </body>
-</html>
+            window.CheckFlagCode = async function(index) {
+                let Reason = prompt("Please enter the the reason why you want this post flagged:");
+                if (Reason === null) {
+                alert("Nothing Typed")
+                } else if (Reason.trim() === "") {
+                alert("Nothing Typed")
+                } else {
+                alert("Thank You for Your Help")
+                FlaggedReason.push(Reason)
+                FlaggedPost.push(Post[index])
+                idText[index] = "%Flagged%";
+                window.DrawPost()
+                await SaveToCloud();
+                }
+            }
         </script>
     </body>
 </html>
