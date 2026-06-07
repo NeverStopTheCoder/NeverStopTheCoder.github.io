@@ -15,6 +15,7 @@
         <textarea rows="1" cols="40"; style="position: absolute; right: 450px; top: 50px;" id="SearchInput"></textarea>
         <h1 style="position:absolute; right: 570px; top: -5px;">Search</h1>
         <button onclick="getChoice(document.getElementById('SearchInput').value);" style="position: absolute; right: 510px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Search</button>
+        <button id="ChangeName"; onclick="ChangeName();" style="position: absolute; right: 170px; bottom: 100px; width: 100px; height: 60px; Font-Size:23px; background-color:gray; color:white; border-radius:5px; display:none;">Change Name</button>
         <button onclick="ClearText();" style="position: absolute; right: 665px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>  
         
         <div id="Draw"></div>
@@ -68,14 +69,12 @@
                     Dates = data.Dates || [];
                     Blocked = data.Blocked || [];
                     PostIndexVAR = Post.length;
-                    console.log("Dates currently loaded from cloud:", Dates);
                 }
                 window.DrawPost(); 
                 window.checkSavedName();
             }
 
             async function SaveToCloud() {
-                console.log("Saving Dates array:", Dates);
                 await setDoc(doc(db, "MakeCode", "SavedData"), {
                     Post: Post,
                     User: User,
@@ -245,6 +244,7 @@
             if (savedName !== null) {
             document.getElementById("myInput2").style.display = "none";
             document.getElementById("Name").innerText = "Locked " + savedName;
+            document.getElementById("ChangeName").style.display = "block"
             document.getElementById("Name").style.color = "black";
             document.getElementById("Name").style.right = "20px";
             }
@@ -258,33 +258,58 @@
                 }
             }
             window.RemoveSavedName = async function(index) {
-            let Ask = prompt("Do You want this post type 1 or all post type 2")
-                if (Ask === "1") {
-            let NewName = prompt("Please enter the New Name:");
-            if (NewName !== null && NewName.trim() !== "") {
-            User[index] = NewName; 
-            window.DrawPost();
-            await SaveToCloud();
-            alert("Name updated successfully!");
-                }
-            } else if (Ask === "2") {
-                let oldName = User[index]; 
-                let NewName = prompt("Please enter the New Name:");
-              if (localStorage.getItem("dbUsername") === oldName) {
-                  localStorage.setItem("dbUsername", NewName);
-              }
-              if (NewName !== null && NewName.trim() !== "") {  
-              for (let i = 0; i < User.length; i++) {
-                  if (User[i] === oldName) {
-                      User[i] = NewName
-               }
-               }
-               window.DrawPost();
-               await SaveToCloud();
-                alert("All posts by " + oldName + " are now updated to " + NewName);
+    let Ask = prompt("Do You want this post type 1 or all post type 2");
+    
+    if (Ask === "1") {
+        let NewName = prompt("Please enter the New Name:");
+        if (NewName === null || NewName.trim() === "") return;
+        NewName = NewName.trim(); 
+
+        if (User[index] === NewName) {
+            alert("This post is already using that name!");
+            return;
+        }
+
+        if (User.includes(NewName)) {
+            alert("This name is already claimed by someone else globally! Please choose a different name.");
+            return; 
+        }
+        
+        User[index] = NewName; 
+        window.DrawPost();
+        await SaveToCloud();
+        alert("Name updated successfully!");
+        
+    } else if (Ask === "2") {
+        let oldName = User[index]; 
+        let NewName = prompt("Please enter the New Name:");
+        if (NewName === null || NewName.trim() === "") return;
+        NewName = NewName.trim(); 
+
+        if (oldName === NewName) {
+            alert("This user is already using that name!");
+            return;
+        }
+
+        if (User.includes(NewName)) {
+            alert("This name is already claimed by someone else globally! Please choose a different name.");
+            return; 
+        }
+        
+        if (localStorage.getItem("dbUsername") === oldName) {
+            localStorage.setItem("dbUsername", NewName);
+        }
+        
+        for (let i = 0; i < User.length; i++) {
+            if (User[i] === oldName) {
+                User[i] = NewName;
             }
-            }
-            }
+        }
+        window.DrawPost();
+        await SaveToCloud();
+        alert("All posts by " + oldName + " are now updated to " + NewName);
+    }
+}
             window.AddLike = async function(index) {
             if (!Likes[index]) {
             Likes[index] = [];
@@ -333,6 +358,37 @@
                     alert("Wrong Code");
                 }
             }
+            window.ChangeName = async function() {
+    let NewName = prompt("Please enter your new name:");
+    if (NewName === null || NewName.trim() === "") return;
+    NewName = NewName.trim(); 
+
+    let currentName = localStorage.getItem("dbUsername");
+
+    if (NewName === currentName) {
+        alert("You are already using this name!");
+        return;
+    }
+
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === NewName && User[i] !== currentName) {
+            alert("This name is already claimed by someone else globally! Please choose a different name.");
+            return; 
+        }
+    }
+
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === currentName) {
+            User[i] = NewName;
+        }
+    }
+    
+    alert("Name Changed");
+    localStorage.setItem("dbUsername", NewName);
+    window.checkSavedName();
+    window.DrawPost();
+    await SaveToCloud();
+}
         </script>
     </body>
 </html>
