@@ -48,6 +48,7 @@
             let PostIndexVAR = 0;
             let FlaggedPost = [];
             let FlaggedReason = [];
+            let Likes = [];
             let savedName = localStorage.getItem("dbUsername");
             document.getElementById("myInput2").value = savedName || "";
             
@@ -61,6 +62,7 @@
                     idText = data.idText || [];
                     FlaggedPost = data.FlaggedPost || [];
                     FlaggedReason = data.FlaggedReason || [];
+                    Likes = data.Likes || [];
                     PostIndexVAR = Post.length;
                 }
                 window.DrawPost(); 
@@ -74,6 +76,7 @@
                     idText: idText,
                     FlaggedPost: FlaggedPost,
                     FlaggedReason: FlaggedReason,
+                    Likes: Likes,
                 });
             }
 
@@ -101,6 +104,7 @@
                     Post.push(post);
                     User.push(name);
                     idText.push(id);
+                    Likes.push([])
                     PostIndex.push(PostIndexVAR);
                     PostIndexVAR += 1;
                     window.DrawPost();
@@ -171,7 +175,9 @@
                             <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
                             <button onclick="CheckFlagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚩</button>
                             <button onclick="CheckName(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">↺Name</button>
+                            <button onclick="AddLike(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">👍</button>
                             <span style=" font-size: 13px; color: gray;">ID:${visualID}</span>
+                            <span style=" font-size: 13px; color: gray;">Likes:${(Likes[i] || []).length}</span>
                         </div>
                         <h3>${User[i]}:</h3>
                         ${Post[i]}
@@ -260,6 +266,19 @@
                 alert("All posts by " + oldName + " are now updated to " + NewName);
             }
             }
+            }
+            window.AddLike = async function(index) {
+            if (!Likes[index]) {
+            Likes[index] = [];
+            }
+            let savedName = localStorage.getItem("dbUsername");
+            if (!Likes[index].includes(savedName)) {
+                    Likes[index].push(savedName)
+            }else {
+                 Likes[index].splice(Likes[index].indexOf(savedName),1)
+            }
+            window.DrawPost();
+            await SaveToCloud();
             }
         </script>
     </body>
