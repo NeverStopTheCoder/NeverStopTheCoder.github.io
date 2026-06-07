@@ -377,9 +377,13 @@
                 let Edit = prompt("Change " + Post[index] + " to:");
                 if (Edit !== null && Edit.trim() !== "") {
                 Post[index] = Edit
+                }
+                let Edit2 = prompt("Change the date from " + Dates[index] + " to:");
+                if (Edit2 !== null && Edit2.trim() !== "") {
+                Dates[index] = Edit2
+                }
                 window.DrawPost();
                 await SaveToCloud(); 
-                }
             }
         </script>
     </body>
