@@ -375,10 +375,11 @@
             }
             window.Edit = async function(index) {
                 let Edit = prompt("Change " + Post[index] + " to:");
-                if (NewName === null || NewName.trim() === "") return;
+                if (Edit !== null && Edit.trim() !== "") {
                 Post[index] = Edit
                 window.DrawPost();
                 await SaveToCloud(); 
+                }
             }
         </script>
     </body>
