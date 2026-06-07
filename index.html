@@ -183,7 +183,7 @@
                         continue
                     }else {
                     document.getElementById("Draw").innerHTML += `
-                    <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 120px">
+                    <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 150px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
                             <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
                             <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
@@ -192,6 +192,7 @@
                             <button onclick="AddLike(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">👍</button>
                             <button onclick="CheckBlock(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚫</button>
                             <button onclick="CheckUnBlock(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🔓</button>
+                            <button onclick="CheckEdit(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">✏️</button>
                             <span style=" font-size: 13px; color: gray;">ID:${visualID}</span>
                             <span style=" font-size: 13px; color: gray;">Likes:${(Likes[i] || []).length}</span>
                             <span style=" font-size: 13px; color: gray;">Date:${(Dates[i] || "No Date")}</span>
@@ -257,7 +258,7 @@
                     alert("Wrong Code");
                 }
             }
-            window.RemoveSavedName = async function(index) {
+           window.RemoveSavedName = async function(index) {
             let Ask = prompt("Do You want this post type 1 or all post type 2")
                 if (Ask === "1") {
             let NewName = prompt("Please enter the New Name:");
@@ -364,6 +365,21 @@
     window.DrawPost();
     await SaveToCloud();
 }
+            window.CheckEdit = async function(index) {
+                let Code = prompt("Please enter the code:");
+                if (btoa(Code) === "JTEzMTEl") {
+                    window.Edit(index);
+                } else {
+                    alert("Wrong Code");
+                }
+            }
+            window.Edit = async function(index) {
+                let Edit = prompt("Change " + Post[index] + " to:");
+                if (NewName === null || NewName.trim() === "") return;
+                Post[index] = Edit
+                window.DrawPost();
+                await SaveToCloud(); 
+            }
         </script>
     </body>
 </html>
