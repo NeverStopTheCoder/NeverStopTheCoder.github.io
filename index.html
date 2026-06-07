@@ -49,6 +49,7 @@
             let FlaggedPost = [];
             let FlaggedReason = [];
             let Likes = [];
+            let Dates = [];
             let savedName = localStorage.getItem("dbUsername");
             document.getElementById("myInput2").value = savedName || "";
             
@@ -62,21 +63,25 @@
                     idText = data.idText || [];
                     FlaggedPost = data.FlaggedPost || [];
                     FlaggedReason = data.FlaggedReason || [];
-                    Likes = data.Likes || [];
+                    Likes = typeof data.Likes === "string" ? JSON.parse(data.Likes) : (data.Likes || []);
+                    Dates = data.Dates || [];
                     PostIndexVAR = Post.length;
+                    console.log("Dates currently loaded from cloud:", Dates);
                 }
                 window.DrawPost(); 
                 window.checkSavedName();
             }
 
             async function SaveToCloud() {
+                console.log("Saving Dates array:", Dates);
                 await setDoc(doc(db, "MakeCode", "SavedData"), {
                     Post: Post,
                     User: User,
                     idText: idText,
                     FlaggedPost: FlaggedPost,
                     FlaggedReason: FlaggedReason,
-                    Likes: Likes,
+                    Likes: JSON.stringify(Likes),
+                    Dates: Dates,
                 });
             }
 
@@ -99,12 +104,13 @@
                             words[i] = `<img src="${words[i]}" style="max-width: 100%; height: auto; border-radius: 4px;">`;
                         }
                     }
-                    
+                    let CurrentDate = new Date()
                     post = words.join(" ");
                     Post.push(post);
                     User.push(name);
                     idText.push(id);
                     Likes.push([])
+                    Dates.push(CurrentDate.toLocaleDateString())
                     PostIndex.push(PostIndexVAR);
                     PostIndexVAR += 1;
                     window.DrawPost();
@@ -152,6 +158,8 @@
                 User.splice(index, 1);
                 idText.splice(index, 1);
                 PostIndex.splice(index, 1);
+                Dates.splice(index, 1);
+                Likes.splice(index, 1);
                 for (let i = index; i < PostIndex.length; i++) {
                     PostIndex[i] -= 1;
                 }
@@ -169,7 +177,7 @@
                         continue
                     }else {
                     document.getElementById("Draw").innerHTML += `
-                    <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px;">
+                    <div style="background-color:white; display: block; width: 400px; padding: 25px; border-radius:5px; margin-bottom: 15px;">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
                             <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
                             <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
@@ -178,6 +186,7 @@
                             <button onclick="AddLike(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">👍</button>
                             <span style=" font-size: 13px; color: gray;">ID:${visualID}</span>
                             <span style=" font-size: 13px; color: gray;">Likes:${(Likes[i] || []).length}</span>
+                            <span style=" font-size: 13px; color: gray;">Date:${(Dates[i] || "No Date")}</span>
                         </div>
                         <h3>${User[i]}:</h3>
                         ${Post[i]}
