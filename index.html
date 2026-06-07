@@ -83,6 +83,12 @@
             // 5. App Operational Logic (Unchanged Structure)
             window.AddPost = async function(name, post, id) {
                 if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput3").value.trim() !== "") {
+                    
+                    let currentSavedName = localStorage.getItem("dbUsername");
+        if (currentSavedName !== name && User.includes(name)) {
+            alert("This name is already claimed by someone else globally! Please choose a different name.");
+            return;
+        }      
                     localStorage.setItem("dbUsername", name);
                     let words = post.split(" ");
                     for (let i = 0; i < words.length; i++) {
