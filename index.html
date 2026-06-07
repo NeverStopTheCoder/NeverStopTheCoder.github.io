@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>MakeCodeDataBase</title>
-        <link rel="icon" type="image/png" href="favicon.png?v=2">
+        <link rel="icon" type="image/png" href="favicon.png">
     </head>
     <body style="background-color: powderblue;"> 
         <button onclick="AddPost(document.getElementById('myInput2').value,document.getElementById('myInput').value,document.getElementById('myInput3').value);" style="position: absolute; right: 150px; width: 120px; height: 50px; Font-Size:25px; background-color:gray; color:white; border-radius:5px;">Add Post</button>      
@@ -10,7 +10,7 @@
         <textarea rows="5" cols="40"; style="position: absolute; right: 50px"; id="myInput"></textarea>
          <textarea rows="3" cols="40"; style="position: absolute; right: 50px; bottom: 90px;" id="myInput2"></textarea>
         <textarea rows="3" cols="40"; style="position: absolute; right: 50px; bottom: 290px;" id="myInput3"></textarea>
-        <h1 style="position:absolute; right: 100px; bottom: 150px;">Add Display Name</h1>
+        <h1 id="Name" style="position:absolute; right: 100px; bottom: 150px;">Add Display Name</h1>
         <h1 style="position:absolute; right: 120px; bottom: 350px;">Add Category</h1>
         <textarea rows="1" cols="40"; style="position: absolute; right: 450px; top: 50px;" id="SearchInput"></textarea>
         <h1 style="position:absolute; right: 570px; top: -5px;">Search</h1>
@@ -48,7 +48,9 @@
             let PostIndexVAR = 0;
             let FlaggedPost = [];
             let FlaggedReason = [];
-
+            let savedName = localStorage.getItem("dbUsername");
+            document.getElementById("myInput2").value = savedName || "";
+            
             // 4. Cloud Intermediary Engines
             async function LoadFromCloud() {
                 const docSnap = await getDoc(doc(db, "MakeCode", "SavedData"));
@@ -62,6 +64,7 @@
                     PostIndexVAR = Post.length;
                 }
                 window.DrawPost(); 
+                window.checkSavedName();
             }
 
             async function SaveToCloud() {
@@ -79,7 +82,8 @@
 
             // 5. App Operational Logic (Unchanged Structure)
             window.AddPost = async function(name, post, id) {
-                if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput2").value.trim() !== "" && document.getElementById("myInput3").value.trim() !== "") {
+                if (document.getElementById("myInput").value.trim() !== "" && document.getElementById("myInput3").value.trim() !== "") {
+                    localStorage.setItem("dbUsername", name);
                     let words = post.split(" ");
                     for (let i = 0; i < words.length; i++) {
                         if (words[i].includes(".png")) {
@@ -94,6 +98,7 @@
                     PostIndex.push(PostIndexVAR);
                     PostIndexVAR += 1;
                     window.DrawPost();
+                    window.checkSavedName();
 
                     await SaveToCloud();
                 }
@@ -203,6 +208,15 @@
                 window.DrawPost()
                 await SaveToCloud();
                 }
+            }
+            window.checkSavedName = function() {
+            let savedName = localStorage.getItem("dbUsername");
+            if (savedName !== null) {
+            document.getElementById("myInput2").style.display = "none";
+            document.getElementById("Name").innerText = "Locked " + savedName;
+            document.getElementById("Name").style.color = "black";
+            document.getElementById("Name").style.right = "20px";
+            }
             }
         </script>
     </body>
