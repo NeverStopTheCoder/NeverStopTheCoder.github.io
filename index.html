@@ -4,7 +4,7 @@
         <title>MakeCodeDataBase</title>
         <link rel="icon" type="image/png" href="favicon.png">
     </head>
-    <body style="background-color: powderblue;"> 
+    <body id="Background" style="background-color: powderblue;"> 
         <button onclick="AddPost(document.getElementById('myInput2').value,document.getElementById('myInput').value,document.getElementById('myInput3').value);" style="position: absolute; right: 150px; width: 120px; height: 50px; Font-Size:25px; background-color:gray; color:white; border-radius:5px;">Add Post</button>      
         <h1>What Would You Like To Post Today</h1>
         <textarea rows="5" cols="40"; style="position: absolute; right: 50px"; id="myInput"></textarea>
@@ -16,14 +16,20 @@
         <h1 style="position:absolute; right: 570px; top: -5px;">Search</h1>
         <button onclick="getChoice(document.getElementById('SearchInput').value);" style="position: absolute; right: 510px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Search</button>
         <button id="ChangeName"; onclick="ChangeName();" style="position: absolute; right: 170px; bottom: 100px; width: 100px; height: 60px; Font-Size:23px; background-color:gray; color:white; border-radius:5px; display:none;">Change Name</button>
-        <button onclick="ClearText();" style="position: absolute; right: 665px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>  
+        <button onclick="ClearText();" style="position: absolute; right: 665px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
+        <input style="position: absolute; right: 70px; bottom: 230px"; type="color" id="BackgroundColor" value="#ff0000" onchange="ChangeBackground()">
+         <h2 style="position:absolute; right: 10px; bottom: 240px;">BackGround Color</h2>
+        <input style="position: absolute; right: 270px; bottom: 230px"; type="color" id="TextBoxColor" value="#ff0000" onchange="ChangeTextBox()">
+         <h2 style="position:absolute; right: 230px; bottom: 240px;">Text Box Color</h2>
+
         
         <div id="Draw"></div>
         <div style="position: absolute; right: 450px; top: 80px;" id="Draw2"></div>
 
         <script type="module">   
             "use strict";
-
+            let Color = 0
+            
             // 1. Core Firebase Cloud Drivers
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
             import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -186,7 +192,7 @@
                     continue
                     } else {
                     document.getElementById("Draw").innerHTML += `
-                    <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
+                    <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
                             <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
                             <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
@@ -207,7 +213,16 @@
                 }
                 }
             }
+            window.ChangeBackground = function() {
+                let Color = document.getElementById("BackgroundColor").value;
+                document.body.style.backgroundColor = Color
+            }
 
+            window.ChangeTextBox = function() {
+                 Color = document.getElementById("TextBoxColor").value;
+                 window.DrawPost()
+            }
+            
             window.ClearText = function() {
                 document.getElementById("Draw2").innerHTML = "";
                 document.getElementById("SearchInput").value = "";
@@ -424,7 +439,7 @@
     }
 }
 
-window.Unflag = async function(index) {
+    window.Unflag = async function(index) {
     idText[index] = idText[index].replace("%Flagged%", "");
 
     let flagIndex = FlaggedPost.indexOf(Post[index]);
@@ -438,7 +453,9 @@ window.Unflag = async function(index) {
     window.DrawPost();
     document.getElementById("Draw2").innerHTML = "";
     await SaveToCloud();
+    
 }
+            
         </script>
     </body>
 </html>
