@@ -149,41 +149,53 @@
                 }
             }
 
-            window.getChoice = function(Choice) {
-                document.getElementById("Draw2").innerHTML = "";
-                 if (Choice == "") {
-                    alert("Type Something")
-                     return
-                    }
-                for (let i = 0; i < idText.length; i++) {
-                      if (Choice == "%Flagged%" && idText[i].startsWith("%Flagged%")) {
-    document.getElementById("Draw2").innerHTML += `
-    <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
-        <h3>${User[i]}:</h3>
-        <p>${FlaggedReason[FlaggedPost.indexOf(Post[i]) ]}</p>
-        <span>${idText[i].replace("%Flagged%", "")}</span>
-        <div style="display: flex; gap: 5px; margin-top: 5px;">
-            <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
-            <button onclick="CheckUnflagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">✅</button>
-        </div>
-    </div>
-    `;
-    continue;
-}else if (idText[i] == Choice || idText[i].includes(Choice) && !idText[i].includes("%Flagged%")) {
-                        document.getElementById("Draw2").innerHTML += `
-                        <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
-                            <h3>${User[i]}:</h3>
-                            <p>${Post[i]}</p>
-                            <span>${idText[i]}</span>
-                        </div>
-                        `;
-                        continue;
-                    }
-                    else if (idText[i] !== Choice || !idText[i].includes(Choice)) {
-                        continue;
-                    }
-                }
-            }
+           window.getChoice = function(Choice) {
+    // 1. Clean up the search input (removes sneaky spaces/newlines from the textarea)
+    let cleanChoice = Choice.trim().toLowerCase();
+    
+    document.getElementById("Draw2").innerHTML = "";
+    
+    if (cleanChoice == "") {
+        alert("Type Something");
+        return;
+    }
+    
+    for (let i = 0; i < idText.length; i++) {
+        if (!idText[i]) {
+            continue;
+        }
+        
+        let currentId = idText[i].toLowerCase();
+        if (cleanChoice == "%flagged%" && currentId.startsWith("%flagged%")) {
+            let flagIndex = FlaggedPost.indexOf(Post[i]);
+            let reason = flagIndex !== -1 ? FlaggedReason[flagIndex] : "No reason provided";
+            
+            document.getElementById("Draw2").innerHTML += `
+            <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
+                <h3>${User[i] || 'User'}:</h3>
+                <p>${reason}</p>
+                <span>${idText[i].replace("%Flagged%", "")}</span>
+                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                    <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
+                    <button onclick="CheckUnflagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">✅</button>
+                </div>
+            </div>
+            `;
+            continue;
+            
+        // Handle regular category searches (ignores flagged entries unless specified)
+        } else if (!currentId.includes("%flagged%") && (idText[i] == Choice || idText[i].includes(Choice) || currentId.includes(cleanChoice))) {
+            document.getElementById("Draw2").innerHTML += `
+            <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
+                <h3>${User[i] || 'User'}:</h3>
+                <p>${Post[i]}</p>
+                <span>${idText[i]}</span>
+            </div>
+            `;
+            continue;
+        }
+    }
+}
 
             window.RemovePost = async function(index) {
                 Post.splice(index, 1);
@@ -208,7 +220,7 @@
                 document.getElementById("Draw").innerHTML = "";
                 let visualID = 0;
                 for (let i = 0; i < Post.length; i++) {
-                    if (idText[i].startsWith("%Flagged%")) {
+                    if (idText[i] && idText[i].startsWith("%Flagged%")) {
                     continue
                     } else {
                     document.getElementById("Draw").innerHTML += `
@@ -230,8 +242,8 @@
                     </div>
                     <div style="position: absolute;">
                                 ${(Profile[i] === "D" || !Profile[i] || Profile[i] == null) 
-                                    ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height:                                           45px; background-color: #8a8a8a; color: white;                                                                              border-radius: 8px; display: flex; align-items: center; justify-content: center;                                            font-family: Arial, sans-serif; font-weight: bold; font-size: 22px; border: 2px                                             solid gray;">D</div>`
-                                    : `<img src="${Profile[i]}"style="position: relative; bottom: 70px; right: -450px;                                             width: 45px; height: 45px; border-radius: 8px;                                                                              border: 2px solid gray; background-color: white; object-fit: contain;">`
+                                    ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height:                               245px; background-color: #8a8a8a; color: white;                                                                                                                                           border-radius: 8px; display: flex; align-items: center; justify-content: center;                                            font-family: Arial, sans-serif; font-weight: bold; font-size: 22px; border: 2px                                              solid gray;">D</div>`
+                                    : `<img src="${Profile[i]}"style="position: relative; bottom: 70px; right: -450px;                               width: 45px; height: 45px; border-radius: 8px;                                                                                                                                            border: 2px solid gray; background-color: white; object-fit: contain;">`
                                 }
                     </div>
                     `;
