@@ -188,7 +188,6 @@
                             <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
                             <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
                             <button onclick="CheckFlagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚩</button>
-                            <button onclick="CheckName(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">↺Name</button>
                             <button onclick="AddLike(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">👍</button>
                             <button onclick="CheckBlock(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚫</button>
                             <button onclick="CheckUnBlock(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🔓</button>
@@ -250,14 +249,7 @@
             document.getElementById("Name").style.right = "20px";
             }
             }
-            window.CheckName = async function(index) {
-                let Code = prompt("Please enter the code:");
-                if (btoa(Code) === "JTEzMTEl") {
-                    window.RemoveSavedName(index);
-                } else {
-                    alert("Wrong Code");
-                }
-            }
+
            window.RemoveSavedName = async function(index) {
             let Ask = prompt("Do You want this post type 1 or all post type 2")
                 if (Ask === "1") {
@@ -374,13 +366,48 @@
                 }
             }
             window.Edit = async function(index) {
-                let Edit = prompt("Change " + Post[index] + " to:");
-                if (Edit !== null && Edit.trim() !== "") {
-                Post[index] = Edit
+                let Choice = prompt("What would you like to edit between Post,Name,Date,Category")
+                if (Choice === null) {
+                alert("Nothing Typed")
+                    return 
+                } else if (Choice.trim() === "") {
+                alert("Nothing Typed")
+                    return
                 }
-                let Edit2 = prompt("Change the date from " + Dates[index] + " to:");
-                if (Edit2 !== null && Edit2.trim() !== "") {
-                Dates[index] = Edit2
+                if (Choice !== null && Choice.trim() !== "") {
+                if (Choice == "Post") {
+                let EditPost = prompt("Change " + Post[index] + " to:")
+                if (EditPost === null) {
+                alert("Nothing Typed")
+                    return 
+                } else if (EditPost.trim() === "") {
+                alert("Nothing Typed")
+                    return
+                }
+                Post[index] = EditPost
+                } else if (Choice == "Name") {
+                window.RemoveSavedName(index);
+                } else if (Choice == "Date") {
+                let EditDate = prompt("Change " + Dates[index] + " to:")
+                if (EditDate === null) {
+                alert("Nothing Typed")
+                    return 
+                } else if (EditDate.trim() === "") {
+                alert("Nothing Typed")
+                    return
+                }
+                Dates[index] = EditDate
+                } else if (Choice == "Category") {
+                let EditCategory = prompt("Change " + idText[index] + " to:")
+                if (EditCategory === null) {
+                alert("Nothing Typed")
+                    return 
+                } else if (EditCategory.trim() === "") {
+                alert("Nothing Typed")
+                    return
+                }
+                idText[index] = EditCategory
+                }
                 }
                 window.DrawPost();
                 await SaveToCloud(); 
