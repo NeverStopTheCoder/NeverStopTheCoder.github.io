@@ -21,10 +21,18 @@
          <h2 style="position:absolute; right: 10px; bottom: 240px;">BackGround Color</h2>
         <input style="position: absolute; right: 270px; bottom: 230px"; type="color" id="TextBoxColor" value="#ff0000" onchange="ChangeTextBox()">
          <h2 style="position:absolute; right: 230px; bottom: 240px;">Text Box Color</h2>
-
+        <button onclick="OpenEditor();" style="position: absolute; right: 105px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Change Profile</button>
         
         <div id="Draw"></div>
         <div style="position: absolute; right: 450px; top: 80px;" id="Draw2"></div>
+        <div id="Profile" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: powderblue; z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+            <button onclick="CloseEditor();" style="position: absolute; right: 770px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Close</button>
+            <button onclick="SaveArt();" style="position: absolute; right: 700px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save</button>
+            <button onclick="ClearArt();" style="position: absolute; right: 630px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
+            <input style="position: absolute; right: 575px; bottom: 125px"; type="color" id="ArtColor" value="#ff0000">
+            <input style="position: absolute; right: 520px; bottom: 125px"; type="color" id="ArtColor2" value="#ff0000">
+            <canvas id="DrawProfile" width="300" height="300" style="background-color: white; border: 2px solid black;"></canvas>
+        </div>
 
         <script type="module">   
             "use strict";
@@ -58,6 +66,7 @@
             let Likes = [];
             let Dates = [];
             let Blocked = [];
+            let Profile = [];
             let savedName = localStorage.getItem("dbUsername");
             document.getElementById("myInput2").value = savedName || "";
             
@@ -74,6 +83,7 @@
                     Likes = typeof data.Likes === "string" ? JSON.parse(data.Likes) : (data.Likes || []);
                     Dates = data.Dates || [];
                     Blocked = data.Blocked || [];
+                    Profile = data.Profile || [];
                     PostIndexVAR = Post.length;
                 }
                 window.DrawPost(); 
@@ -90,6 +100,7 @@
                     Likes: JSON.stringify(Likes),
                     Dates: Dates,
                     Blocked: Blocked,
+                    Profile: Profile
                 });
             }
 
@@ -118,11 +129,17 @@
                     }
                     let CurrentDate = new Date()
                     post = words.join(" ");
+                    if (User.includes(name)) {
+                    let ProfileIndex = User.indexOf(name)
+                        Profile.push(Profile[ProfileIndex])
+                    }else {
+                    Profile.push("D")
+                    }
                     Post.push(post);
                     User.push(name);
                     idText.push(id);
                     Likes.push([])
-                    Dates.push(CurrentDate.toLocaleDateString())
+                    Dates.push(CurrentDate.toLocaleDateString()) 
                     PostIndex.push(PostIndexVAR);
                     PostIndexVAR += 1;
                     window.DrawPost();
@@ -152,7 +169,7 @@
     </div>
     `;
     continue;
-}else if (idText[i] == Choice || idText[i].includes(Choice)) {
+}else if (idText[i] == Choice || idText[i].includes(Choice) && !idText[i].includes("%Flagged%")) {
                         document.getElementById("Draw2").innerHTML += `
                         <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
                             <h3>${User[i]}:</h3>
@@ -175,6 +192,9 @@
                 PostIndex.splice(index, 1);
                 Dates.splice(index, 1);
                 Likes.splice(index, 1);
+                Profile.splice(index, 1);
+                FlaggedPost.splice(index, 1);
+                FlaggedReason.splice(index, 1);
                 for (let i = index; i < PostIndex.length; i++) {
                     PostIndex[i] -= 1;
                 }
@@ -207,6 +227,12 @@
                         </div>
                         <h3>${User[i]}:</h3>
                         ${Post[i]}
+                    </div>
+                    <div style="position: absolute;">
+                                ${(Profile[i] === "D" || !Profile[i] || Profile[i] == null) 
+                                    ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height:                                           45px; background-color: #8a8a8a; color: white;                                                                              border-radius: 8px; display: flex; align-items: center; justify-content: center;                                            font-family: Arial, sans-serif; font-weight: bold; font-size: 22px; border: 2px                                             solid gray;">D</div>`
+                                    : `<img src="${Profile[i]}"style="position: relative; bottom: 70px; right: -450px;                                             width: 45px; height: 45px; border-radius: 8px;                                                                              border: 2px solid gray; background-color: white; object-fit: contain;">`
+                                }
                     </div>
                     `;
                         visualID++
@@ -281,10 +307,10 @@
             } else if (Ask === "2") {
                 let oldName = User[index]; 
                 let NewName = prompt("Please enter the New Name:");
+              if (NewName !== null && NewName.trim() !== "") {  
               if (localStorage.getItem("dbUsername") === oldName) {
                   localStorage.setItem("dbUsername", NewName);
               }
-              if (NewName !== null && NewName.trim() !== "") {  
               for (let i = 0; i < User.length; i++) {
                   if (User[i] === oldName) {
                       User[i] = NewName
@@ -455,6 +481,55 @@
     await SaveToCloud();
     
 }
+    window.OpenEditor = async function() {
+    document.getElementById("Profile").style.display = "flex";
+        const Art = document.getElementById('DrawProfile');
+        const Art2 = Art.getContext('2d');
+    Art.onclick = (event) => {
+    let ClickX = event.offsetX;
+    let ClickY = event.offsetY;  
+    Art2.fillStyle = document.getElementById("ArtColor").value;
+    ClickX = Math.floor(ClickX / 20) * 20;
+    ClickY = Math.floor(ClickY / 20) * 20;
+    if (ClickX < 300 && ClickY <= 300 && ClickX >= 0 && ClickY >= 0) {
+        Art2.fillRect(ClickX, ClickY, 20, 20);
+    }
+    };
+     Art.oncontextmenu = (event) => {
+    event.preventDefault();
+    let ClickX = event.offsetX;
+    let ClickY = event.offsetY;  
+    Art2.fillStyle = document.getElementById("ArtColor2").value;
+    ClickX = Math.floor(ClickX / 20) * 20;
+    ClickY = Math.floor(ClickY / 20) * 20;
+    if (ClickX < 300 && ClickY <= 300 && ClickX >= 0 && ClickY >= 0) {
+        Art2.fillRect(ClickX, ClickY, 20, 20);
+    }
+    };
+    }
+    window.CloseEditor = async function() {
+    document.getElementById("Profile").style.display = "none";
+    }
+    window.ClearArt = async function() {
+    document.getElementById("Profile").style.display = "flex";
+        const Art = document.getElementById('DrawProfile');
+        const Art2 = Art.getContext('2d');
+        Art2.fillStyle = "white";
+        Art2.fillRect(0, 0, 300, 300);
+    }
+    window.SaveArt = async function() {
+    const Art = document.getElementById('DrawProfile');
+    let savedName = localStorage.getItem("dbUsername");
+    let ArtImage = Art.toDataURL();
+    document.getElementById("Profile").style.display = "none";
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === savedName) {
+            Profile[i] = ArtImage
+        }
+    }
+    window.DrawPost();
+    await SaveToCloud();
+    }
             
         </script>
     </body>
