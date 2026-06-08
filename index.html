@@ -133,17 +133,20 @@
                      return
                     }
                 for (let i = 0; i < idText.length; i++) {
-                      if (Choice == "%Flagged%" && idText[i] == "%Flagged%") {
-                        document.getElementById("Draw2").innerHTML += `
-                        <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
-                            <h3>${User[i]}:</h3>
-                            <p>${FlaggedReason[FlaggedPost.indexOf(Post[i]) ]}</p>
-                            <span>${idText[i]}</span>
-                            <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
-                        </div>
-                        `;
-                        continue;
-                    }else if (idText[i] == Choice || idText[i].includes(Choice)) {
+                      if (Choice == "%Flagged%" && idText[i].startsWith("%Flagged%")) {
+    document.getElementById("Draw2").innerHTML += `
+    <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
+        <h3>${User[i]}:</h3>
+        <p>${FlaggedReason[FlaggedPost.indexOf(Post[i]) ]}</p>
+        <span>${idText[i].replace("%Flagged%", "")}</span>
+        <div style="display: flex; gap: 5px; margin-top: 5px;">
+            <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
+            <button onclick="CheckUnflagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">✅</button>
+        </div>
+    </div>
+    `;
+    continue;
+}else if (idText[i] == Choice || idText[i].includes(Choice)) {
                         document.getElementById("Draw2").innerHTML += `
                         <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
                             <h3>${User[i]}:</h3>
@@ -179,9 +182,9 @@
                 document.getElementById("Draw").innerHTML = "";
                 let visualID = 0;
                 for (let i = 0; i < Post.length; i++) {
-                    if (idText[i] == "%Flagged%") {
-                        continue
-                    }else {
+                    if (idText[i].startsWith("%Flagged%")) {
+                    continue
+                    } else {
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:white; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -234,7 +237,7 @@
                 alert("Thank You for Your Help")
                 FlaggedReason.push(Reason)
                 FlaggedPost.push(Post[index])
-                idText[index] = "%Flagged%";
+                idText[index] = "%Flagged%" + idText[index];
                 window.DrawPost()
                 await SaveToCloud();
                 }
@@ -412,6 +415,30 @@
                 window.DrawPost();
                 await SaveToCloud(); 
             }
+            window.CheckUnflagCode = async function(index) {
+    let Code = prompt("Please enter the code:");
+    if (btoa(Code) === "JTEzMTEl") {
+        window.Unflag(index);
+    } else {
+        alert("Wrong Code");
+    }
+}
+
+window.Unflag = async function(index) {
+    idText[index] = idText[index].replace("%Flagged%", "");
+
+    let flagIndex = FlaggedPost.indexOf(Post[index]);
+    if (flagIndex !== -1) {
+        FlaggedPost.splice(flagIndex, 1);
+        FlaggedReason.splice(flagIndex, 1);
+    }
+
+    alert("Post has been unflagged and restored to its original category!");
+
+    window.DrawPost();
+    document.getElementById("Draw2").innerHTML = "";
+    await SaveToCloud();
+}
         </script>
     </body>
 </html>
