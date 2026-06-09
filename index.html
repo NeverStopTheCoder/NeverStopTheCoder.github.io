@@ -147,7 +147,7 @@
                     PostIndexVAR += 1;
                     window.DrawPost();
                     window.checkSavedName();
-
+                    
                     await SaveToCloud();
                 }
             }
@@ -225,7 +225,38 @@
                 for (let i = 0; i < Post.length; i++) {
                     if (idText[i] && idText[i].startsWith("%Flagged%")) {
                     continue
-                    } else {
+                    } else if (idText[i] && idText[i].includes("%Pin%"))  {
+                    document.getElementById("Draw").innerHTML += `
+                    <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
+                        <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <button onclick="Copy(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">Copy</button>
+                            <button onclick="CheckCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🗑️</button>
+                            <button onclick="CheckFlagCode(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚩</button>
+                            <button onclick="AddLike(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">👍</button>
+                            <button onclick="CheckBlock(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🚫</button>
+                            <button onclick="CheckUnBlock(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">🔓</button>
+                            <button onclick="CheckEdit(${i});" style="width: 60px; height: 25px; Font-Size:13px; background-color:white; color:gray; border-radius:5px;">✏️</button>
+                            <span style=" font-size: 13px; color: gray;">ID:${visualID}</span>
+                            <span style=" font-size: 13px; color: gray;">Likes:${(Likes[i] || []).length}</span>
+                            <span style=" font-size: 13px; color: gray;">Date:${(Dates[i] || "No Date")}</span>
+                        </div>
+                        <h3>${User[i]}:</h3>
+                        ${Post[i]}
+                    </div>
+                    <div style="position: absolute;">
+                                ${(Profile[i] === "D" || !Profile[i] || Profile[i] == null) 
+                                    ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height:                               245px; background-color: #8a8a8a; color: white;                                                                                                                                           border-radius: 8px; display: flex; align-items: center; justify-content: center;                                            font-family: Arial, sans-serif; font-weight: bold; font-size: 22px; border: 2px                                              solid gray;">D</div>`
+                                    : `<img src="${Profile[i]}"style="position: relative; bottom: 70px; right: -450px;                               width: 45px; height: 45px; border-radius: 8px;                                                                                                                                            border: 2px solid gray; background-color: white; object-fit: contain;"> <span style="position: relative; bottom: 70px; right: -350px; font-size: 13px; color: gray;">Pined📌</span>`
+                                }
+                    </div>
+                    `;
+                        visualID++
+                }
+                }
+                for (let i = 0; i < Post.length; i++) {
+                    if (idText[i] && idText[i].startsWith("%Flagged%")) {
+                    continue
+                    } else if (idText[i] && !idText[i].includes("%Pin%")) {
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -425,7 +456,7 @@
                 }
             }
             window.Edit = async function(index) {
-                let Choice = prompt("What would you like to edit between Post,Name,Date,Category")
+                let Choice = prompt("What would you like to edit between Post,Name,Date,Category,Pin/UnPin")
                 if (Choice === null) {
                 alert("Nothing Typed")
                     return 
@@ -466,7 +497,27 @@
                     return
                 }
                 idText[index] = EditCategory
+                } else if (Choice == "Pin") {
+                let EditPin = prompt("Pin?")
+                if (EditPin === null) {
+                alert("Nothing Typed")
+                    return 
+                } else if (EditPin.trim() === "") {
+                alert("Nothing Typed")
+                    return
                 }
+                idText[index] += "%Pin%"
+                } else if (Choice == "UnPin") {
+                let EditPin = prompt("UnPin?")
+                if (EditPin === null) {
+                alert("Nothing Typed")
+                    return 
+                } else if (EditPin.trim() === "") {
+                alert("Nothing Typed")
+                    return
+                }
+                idText[index] = idText[index].replace("%Pin%","");
+                } 
                 }
                 window.DrawPost();
                 await SaveToCloud(); 
