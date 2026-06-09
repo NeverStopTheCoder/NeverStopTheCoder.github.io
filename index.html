@@ -97,8 +97,13 @@
                     Blocked = data.Blocked || [];
                     Profile = data.Profile || [];
                     PostIndexVAR = Post.length;
+                    if (ProfileSlot1.length > User.length) ProfileSlot1.length = User.length;
                     while (ProfileSlot1.length < User.length) ProfileSlot1.push("");
+
+                    if (ProfileSlot2.length > User.length) ProfileSlot2.length = User.length;
                     while (ProfileSlot2.length < User.length) ProfileSlot2.push("");
+
+                    if (ProfileSlot3.length > User.length) ProfileSlot3.length = User.length;
                     while (ProfileSlot3.length < User.length) ProfileSlot3.push("");
                 }
                 window.DrawPost(); 
