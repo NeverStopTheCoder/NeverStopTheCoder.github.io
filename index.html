@@ -8,7 +8,7 @@
         <button onclick="AddPost(document.getElementById('myInput2').value,document.getElementById('myInput').value,document.getElementById('myInput3').value);" style="position: absolute; right: 150px; width: 120px; height: 50px; Font-Size:25px; background-color:gray; color:white; border-radius:5px;">Add Post</button>      
         <h1>What Would You Like To Post Today</h1>
         <textarea rows="5" cols="40"; style="position: absolute; right: 50px"; id="myInput"></textarea>
-         <textarea rows="3" cols="40"; style="position: absolute; right: 50px; bottom: 90px;" id="myInput2"></textarea>
+         <textarea rows="3" cols="40"; style="position: absolute; right: 50px; bottom: 90px;" id="myInput2" disabled></textarea>
         <textarea rows="3" cols="40"; style="position: absolute; right: 50px; bottom: 290px;" id="myInput3"></textarea>
         <h1 id="Name" style="position:absolute; right: 100px; bottom: 150px;">Add Display Name</h1>
         <h1 style="position:absolute; right: 120px; bottom: 350px;">Add Category</h1>
@@ -30,6 +30,12 @@
             <button onclick="SaveArt();" style="position: absolute; right: 700px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save</button>
             <button onclick="ClearArt();" style="position: absolute; right: 630px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
             <button onclick="FillArt();" style="position: absolute; right: 770px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Fill</button>
+            <button onclick="SaveSlot1();" style="position: absolute; right: 460px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot1</button>
+            <button onclick="LoadSlot1();" style="position: absolute; right: 390px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot1</button>
+            <button onclick="SaveSlot2();" style="position: absolute; right: 460px; bottom: 345px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot2</button>
+            <button onclick="LoadSlot2();" style="position: absolute; right: 390px; bottom: 345px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot2</button>
+            <button onclick="SaveSlot3();" style="position: absolute; right: 460px; bottom: 280px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot3</button>
+            <button onclick="LoadSlot3();" style="position: absolute; right: 390px; bottom: 280px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot3</button>
             <button onclick="FlipHorizontally();" style="position: absolute; right: 680px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Horizontally</button>
             <button onclick="FlipVertically();" style="position: absolute; right: 590px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Vertically</button>
             <input style="position: absolute; right: 575px; bottom: 125px"; type="color" id="ArtColor" value="#ff0000">
@@ -70,6 +76,9 @@
             let Dates = [];
             let Blocked = [];
             let Profile = [];
+            let ProfileSlot1 = [];
+            let ProfileSlot2 = [];
+            let ProfileSlot3 = [];
             let savedName = localStorage.getItem("dbUsername");
             document.getElementById("myInput2").value = savedName || "";
             
@@ -87,6 +96,9 @@
                     Dates = data.Dates || [];
                     Blocked = data.Blocked || [];
                     Profile = data.Profile || [];
+                    ProfileSlot1 = data.ProfileSlot1 || [];
+                    ProfileSlot2 = data.ProfileSlot2 || [];
+                    ProfileSlot3 = data.ProfileSlot3 || [];
                     PostIndexVAR = Post.length;
                 }
                 window.DrawPost(); 
@@ -103,7 +115,10 @@
                     Likes: JSON.stringify(Likes),
                     Dates: Dates,
                     Blocked: Blocked,
-                    Profile: Profile
+                    Profile: Profile,
+                    ProfileSlot1: ProfileSlot1,
+                    ProfileSlot2: ProfileSlot2,
+                    ProfileSlot3: ProfileSlot3,
                 });
             }
 
@@ -144,6 +159,9 @@
                     Likes.push([])
                     Dates.push(CurrentDate.toLocaleDateString()) 
                     PostIndex.push(PostIndexVAR);
+                    ProfileSlot1.push("")
+                    ProfileSlot2.push("")
+                    ProfileSlot3.push("")
                     PostIndexVAR += 1;
                     window.DrawPost();
                     window.checkSavedName();
@@ -618,6 +636,81 @@
     Art.style.transform = "scaleY(1)";
     } else {
     Art.style.transform = "scaleY(-1)";
+    }
+    }
+    window.SaveSlot1 = async function() {
+    const Art = document.getElementById('DrawProfile');
+    let savedName = localStorage.getItem("dbUsername");
+    let ArtImage = Art.toDataURL();
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === savedName) {
+            ProfileSlot1[i] = ArtImage
+        }
+    }
+        await SaveToCloud();
+    }
+    window.LoadSlot1 = async function() {
+    const Art = document.getElementById('DrawProfile');
+    let savedName = localStorage.getItem("dbUsername");
+    const Art2 = Art.getContext('2d');
+    const img = new Image();
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === savedName) {
+            img.onload = function() {
+            Art2.drawImage(img, 0, 0);
+            };
+            img.src = ProfileSlot1[i]
+        }
+    }
+    }
+    window.SaveSlot2 = async function() {
+    const Art = document.getElementById('DrawProfile');
+    let savedName = localStorage.getItem("dbUsername");
+    let ArtImage = Art.toDataURL();
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === savedName) {
+            ProfileSlot2[i] = ArtImage
+        }
+    }
+        await SaveToCloud();
+    }
+    window.LoadSlot2 = async function() {
+    const Art = document.getElementById('DrawProfile');
+    let savedName = localStorage.getItem("dbUsername");
+    const Art2 = Art.getContext('2d');
+    const img = new Image();
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === savedName) {
+            img.onload = function() {
+            Art2.drawImage(img, 0, 0);
+            };
+            img.src = ProfileSlot2[i]
+        }
+    }
+    }
+    window.SaveSlot3 = async function() {
+    const Art = document.getElementById('DrawProfile');
+    let savedName = localStorage.getItem("dbUsername");
+    let ArtImage = Art.toDataURL();
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === savedName) {
+            ProfileSlot3[i] = ArtImage
+        }
+    }
+        await SaveToCloud();
+    }
+    window.LoadSlot3 = async function() {
+    const Art = document.getElementById('DrawProfile');
+    let savedName = localStorage.getItem("dbUsername");
+    const Art2 = Art.getContext('2d');
+    const img = new Image();
+    for (let i = 0; i < User.length; i++) {
+        if (User[i] === savedName) {
+            img.onload = function() {
+            Art2.drawImage(img, 0, 0);
+            };
+            img.src = ProfileSlot3[i]
+        }
     }
     }
             
