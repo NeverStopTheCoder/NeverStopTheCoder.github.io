@@ -79,6 +79,7 @@
             let ProfileSlot1 = [];
             let ProfileSlot2 = [];
             let ProfileSlot3 = [];
+            let ProfileUsers = [];
             let savedName = localStorage.getItem("dbUsername");
             document.getElementById("myInput2").value = savedName || "";
             
@@ -96,15 +97,16 @@
                     Dates = data.Dates || [];
                     Blocked = data.Blocked || [];
                     Profile = data.Profile || [];
+                    ProfileUsers = data.ProfileUsers || [];
                     PostIndexVAR = Post.length;
-                    if (ProfileSlot1.length > User.length) ProfileSlot1.length = User.length;
-                    while (ProfileSlot1.length < User.length) ProfileSlot1.push("");
+                    if (ProfileSlot1.length > ProfileUsers.length) ProfileSlot1.length = ProfileUsers.length;
+                    while (ProfileSlot1.length < ProfileUsers.length) ProfileSlot1.push("");
 
-                    if (ProfileSlot2.length > User.length) ProfileSlot2.length = User.length;
-                    while (ProfileSlot2.length < User.length) ProfileSlot2.push("");
+                    if (ProfileSlot2.length > ProfileUsers.length) ProfileSlot2.length = ProfileUsers.length;
+                    while (ProfileSlot2.length < ProfileUsers.length) ProfileSlot2.push("");
 
-                    if (ProfileSlot3.length > User.length) ProfileSlot3.length = User.length;
-                    while (ProfileSlot3.length < User.length) ProfileSlot3.push("");
+                    if (ProfileSlot3.length > ProfileUsers.length) ProfileSlot3.length = ProfileUsers.length;
+                    while (ProfileSlot3.length < ProfileUsers.length) ProfileSlot3.push("");
                 }
                 window.DrawPost(); 
                 window.checkSavedName();
@@ -124,6 +126,7 @@
                     ProfileSlot1: ProfileSlot1,
                     ProfileSlot2: ProfileSlot2,
                     ProfileSlot3: ProfileSlot3,
+                    ProfileUsers: ProfileUsers,
                 });
             }
 
@@ -164,9 +167,6 @@
                     Likes.push([])
                     Dates.push(CurrentDate.toLocaleDateString()) 
                     PostIndex.push(PostIndexVAR);
-                    ProfileSlot1.push("")
-                    ProfileSlot2.push("")
-                    ProfileSlot3.push("")
                     PostIndexVAR += 1;
                     window.DrawPost();
                     window.checkSavedName();
@@ -233,6 +233,9 @@
                 Profile.splice(index, 1);
                 FlaggedPost.splice(index, 1);
                 FlaggedReason.splice(index, 1);
+                ProfileSlot1.splice(postIndex, 1);
+                ProfileSlot2.splice(postIndex, 1);
+                ProfileSlot3.splice(postIndex, 1);
                 for (let i = index; i < PostIndex.length; i++) {
                     PostIndex[i] -= 1;
                 }
@@ -658,83 +661,107 @@ window.FlipVertically = async function() {
     const Art = document.getElementById('DrawProfile');
     let savedName = localStorage.getItem("dbUsername");
     let ArtImage = Art.toDataURL();
-    for (let i = 0; i < User.length; i++) {
-        if (User[i] === savedName) {
-            ProfileSlot1[i] = ArtImage
-            break
-        }
+    
+    let userIndex = ProfileUsers.indexOf(savedName);
+
+    if (userIndex === -1) {
+        ProfileUsers.push(savedName);
+        ProfileSlot1.push("");
+        ProfileSlot2.push("");
+        ProfileSlot3.push("");
+        userIndex = ProfileUsers.length - 1; 
     }
-        await SaveToCloud();
-    }
-    window.LoadSlot1 = async function() {
+
+    ProfileSlot1[userIndex] = ArtImage;
+    await SaveToCloud();
+}
+
+window.LoadSlot1 = async function() {
     const Art = document.getElementById('DrawProfile');
     let savedName = localStorage.getItem("dbUsername");
     const Art2 = Art.getContext('2d');
     const img = new Image();
-    for (let i = 0; i < User.length; i++) {
-        if (User[i] === savedName) {
-            img.onload = function() {
+    
+    let userIndex = ProfileUsers.indexOf(savedName);
+
+    if (userIndex !== -1 && ProfileSlot1[userIndex]) {
+        img.onload = function() {
+            Art2.clearRect(0, 0, Art.width, Art.height);
             Art2.drawImage(img, 0, 0);
-            };
-            img.src = ProfileSlot1[i]
-            break
-        }
+        };
+        img.src = ProfileSlot1[userIndex];
     }
-    }
+}
     window.SaveSlot2 = async function() {
     const Art = document.getElementById('DrawProfile');
     let savedName = localStorage.getItem("dbUsername");
     let ArtImage = Art.toDataURL();
-    for (let i = 0; i < User.length; i++) {
-        if (User[i] === savedName) {
-            ProfileSlot2[i] = ArtImage
-            break
-        }
+    
+    let userIndex = ProfileUsers.indexOf(savedName);
+
+    if (userIndex === -1) {
+        ProfileUsers.push(savedName);
+        ProfileSlot1.push("");
+        ProfileSlot2.push("");
+        ProfileSlot3.push("");
+        userIndex = ProfileUsers.length - 1; 
     }
-        await SaveToCloud();
-    }
-    window.LoadSlot2 = async function() {
+
+    ProfileSlot2[userIndex] = ArtImage;
+    await SaveToCloud();
+}
+
+window.LoadSlot2 = async function() {
     const Art = document.getElementById('DrawProfile');
     let savedName = localStorage.getItem("dbUsername");
     const Art2 = Art.getContext('2d');
     const img = new Image();
-    for (let i = 0; i < User.length; i++) {
-        if (User[i] === savedName) {
-            img.onload = function() {
+    
+    let userIndex = ProfileUsers.indexOf(savedName);
+
+    if (userIndex !== -1 && ProfileSlot2[userIndex]) {
+        img.onload = function() {
+            Art2.clearRect(0, 0, Art.width, Art.height);
             Art2.drawImage(img, 0, 0);
-            };
-            img.src = ProfileSlot2[i]
-            break
-        }
+        };
+        img.src = ProfileSlot2[userIndex];
     }
-    }
+}
     window.SaveSlot3 = async function() {
     const Art = document.getElementById('DrawProfile');
     let savedName = localStorage.getItem("dbUsername");
     let ArtImage = Art.toDataURL();
-    for (let i = 0; i < User.length; i++) {
-        if (User[i] === savedName) {
-            ProfileSlot3[i] = ArtImage
-            break
-        }
+    
+    let userIndex = ProfileUsers.indexOf(savedName);
+
+    if (userIndex === -1) {
+        ProfileUsers.push(savedName);
+        ProfileSlot1.push("");
+        ProfileSlot2.push("");
+        ProfileSlot3.push("");
+        userIndex = ProfileUsers.length - 1; 
     }
-        await SaveToCloud();
-    }
-    window.LoadSlot3 = async function() {
+
+    ProfileSlot3[userIndex] = ArtImage;
+    await SaveToCloud();
+}
+
+window.LoadSlot3 = async function() {
     const Art = document.getElementById('DrawProfile');
     let savedName = localStorage.getItem("dbUsername");
     const Art2 = Art.getContext('2d');
     const img = new Image();
-    for (let i = 0; i < User.length; i++) {
-        if (User[i] === savedName) {
-            img.onload = function() {
+    
+    let userIndex = ProfileUsers.indexOf(savedName);
+
+    if (userIndex !== -1 && ProfileSlot3[userIndex]) {
+        img.onload = function() {
+            Art2.clearRect(0, 0, Art.width, Art.height);
             Art2.drawImage(img, 0, 0);
-            };
-            img.src = ProfileSlot3[i]
-            break
-        }
+        };
+        img.src = ProfileSlot3[userIndex];
     }
-    }
+}
             
         </script>
     </body>
