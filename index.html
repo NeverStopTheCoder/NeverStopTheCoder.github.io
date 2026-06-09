@@ -278,10 +278,13 @@
                         ${Post[i]}
                     </div>
                     <div style="position: absolute;">
-                                ${(Profile[i] === "D" || !Profile[i] || Profile[i] == null) 
-                                    ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height:                               245px; background-color: #8a8a8a; color: white;                                                                                                                                           border-radius: 8px; display: flex; align-items: center; justify-content: center;                                            font-family: Arial, sans-serif; font-weight: bold; font-size: 22px; border: 2px                                              solid gray;">D</div>`
-                                    : `<img src="${Profile[i]}"style="position: relative; bottom: 70px; right: -450px;                               width: 45px; height: 45px; border-radius: 8px;                                                                                                                                            border: 2px solid gray; background-color: white; object-fit: contain;"> <span style="position: relative; bottom: 70px; right: -350px; font-size: 13px; color: gray;">Pined📌</span>`
-                                }
+                                ${
+    (User[i] === "System 🤖") 
+    ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #333; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">S</div>`
+    : (Profile[i] === "D" || !Profile[i] || Profile[i] == null)
+        ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #8a8a8a; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">D</div>`
+        : `<img src="${Profile[i]}" style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; border-radius: 8px; border: 2px solid gray; background-color: white; object-fit: contain;">`
+}
                     </div>
                     `;
                         visualID++
@@ -310,10 +313,13 @@
                         ${Post[i]}
                     </div>
                     <div style="position: absolute;">
-                                ${(Profile[i] === "D" || !Profile[i] || Profile[i] == null) 
-                                    ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height:                               245px; background-color: #8a8a8a; color: white;                                                                                                                                           border-radius: 8px; display: flex; align-items: center; justify-content: center;                                            font-family: Arial, sans-serif; font-weight: bold; font-size: 22px; border: 2px                                              solid gray;">D</div>`
-                                    : `<img src="${Profile[i]}"style="position: relative; bottom: 70px; right: -450px;                               width: 45px; height: 45px; border-radius: 8px;                                                                                                                                            border: 2px solid gray; background-color: white; object-fit: contain;">`
-                                }
+                                ${
+    (User[i] === "System 🤖") 
+    ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #333; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">S</div>`
+    : (Profile[i] === "D" || !Profile[i] || Profile[i] == null)
+        ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #8a8a8a; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">D</div>`
+        : `<img src="${Profile[i]}" style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; border-radius: 8px; border: 2px solid gray; background-color: white; object-fit: contain;">`
+}
                     </div>
                     `;
                         visualID++
@@ -788,12 +794,10 @@ window.AddSystemPost = async function(postContent) {
     
     Post.push(words.join(" "));
     User.push("System 🤖");
-    idText.push("");
+    idText.push("System");
     Likes.push([]);
     Dates.push(new Date().toLocaleDateString());
     PostIndex.push(PostIndexVAR++);
-    
-    // 3. Refresh and Save
     window.DrawPost();
     await SaveToCloud();
 }
@@ -805,6 +809,7 @@ function checkAdminAccess() {
 }
 
 window.onload = function() {
+    LoadFromCloud();
     checkAdminAccess();
 };
         </script>
