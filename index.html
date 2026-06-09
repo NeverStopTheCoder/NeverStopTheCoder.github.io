@@ -623,21 +623,32 @@
     window.FlipHorizontally = async function() {
     const Art = document.getElementById('DrawProfile');
     const Art2 = Art.getContext('2d');
-    if (Art.style.transform === "scaleX(-1)") {
-    Art.style.transform = "scaleX(1)";
-    } else {
-    Art.style.transform = "scaleX(-1)";
-    }
-    }
-    window.FlipVertically = async function() {
+    const img = new Image();
+    img.src = Art.toDataURL();    
+    img.onload = function() {
+        Art2.clearRect(0, 0, 300, 300);
+        Art2.save();
+        Art2.translate(300, 0);
+        Art2.scale(-1, 1);
+        Art2.drawImage(img, 0, 0);
+        Art2.restore();
+    };
+}
+
+window.FlipVertically = async function() {
     const Art = document.getElementById('DrawProfile');
     const Art2 = Art.getContext('2d'); 
-    if (Art.style.transform === "scaleY(-1)") {
-    Art.style.transform = "scaleY(1)";
-    } else {
-    Art.style.transform = "scaleY(-1)";
-    }
-    }
+    const img = new Image();
+    img.src = Art.toDataURL();
+    img.onload = function() {
+        Art2.clearRect(0, 0, 300, 300);
+        Art2.save();
+        Art2.translate(0, 300);
+        Art2.scale(1, -1);
+        Art2.drawImage(img, 0, 0);
+        Art2.restore();
+    };
+}
     window.SaveSlot1 = async function() {
     const Art = document.getElementById('DrawProfile');
     let savedName = localStorage.getItem("dbUsername");
@@ -661,6 +672,7 @@
             Art2.drawImage(img, 0, 0);
             };
             img.src = ProfileSlot1[i]
+            break
         }
     }
     }
@@ -687,6 +699,7 @@
             Art2.drawImage(img, 0, 0);
             };
             img.src = ProfileSlot2[i]
+            break
         }
     }
     }
@@ -713,6 +726,7 @@
             Art2.drawImage(img, 0, 0);
             };
             img.src = ProfileSlot3[i]
+            break
         }
     }
     }
