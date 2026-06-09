@@ -20,9 +20,11 @@
         <input style="position: absolute; right: 70px; bottom: 230px"; type="color" id="BackgroundColor" value="#ff0000" onchange="ChangeBackground()">
          <h2 style="position:absolute; right: 10px; bottom: 240px;">BackGround Color</h2>
         <input style="position: absolute; right: 270px; bottom: 230px"; type="color" id="TextBoxColor" value="#ff0000" onchange="ChangeTextBox()">
+        <button id="AdminBtn" style="position: absolute; top: 55px; display: none;" onclick="AddSystemPost(prompt('System Message:'));">
+         📢 Post as System</button>
          <h2 style="position:absolute; right: 230px; bottom: 240px;">Text Box Color</h2>
         <button onclick="OpenEditor();" style="position: absolute; right: 105px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Change Profile</button>
-        
+        <h3 style="position:absolute; right: 310px; top: 5px;">🛡️ = Mods 🤖 = System</h3>
         <div id="Draw"></div>
         <div style="position: absolute; right: 450px; top: 80px;" id="Draw2"></div>
         <div id="Profile" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: powderblue; z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
@@ -76,6 +78,7 @@
             let Dates = [];
             let Blocked = [];
             let Profile = [];
+            let Mods = ["NeverStopTheCoder"];
             /*
             let ProfileSlot1 = [];
             let ProfileSlot2 = [];
@@ -256,6 +259,7 @@
                     if (idText[i] && idText[i].startsWith("%Flagged%")) {
                     continue
                     } else if (idText[i] && idText[i].includes("%Pin%"))  {
+                    let DisplayName = Mods.includes(User[i]) ? User[i] + " 🛡️" : User[i];
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -270,7 +274,7 @@
                             <span style=" font-size: 13px; color: gray;">Likes:${(Likes[i] || []).length}</span>
                             <span style=" font-size: 13px; color: gray;">Date:${(Dates[i] || "No Date")}</span>
                         </div>
-                        <h3>${User[i]}:</h3>
+                        <h3>${DisplayName}:</h3>
                         ${Post[i]}
                     </div>
                     <div style="position: absolute;">
@@ -287,6 +291,7 @@
                     if (idText[i] && idText[i].startsWith("%Flagged%")) {
                     continue
                     } else if (idText[i] && !idText[i].includes("%Pin%")) {
+                    let DisplayName = Mods.includes(User[i]) ? User[i] + " 🛡️" : User[i];
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -301,7 +306,7 @@
                             <span style=" font-size: 13px; color: gray;">Likes:${(Likes[i] || []).length}</span>
                             <span style=" font-size: 13px; color: gray;">Date:${(Dates[i] || "No Date")}</span>
                         </div>
-                        <h3>${User[i]}:</h3>
+                        <h3>${DisplayName}:</h3>
                         ${Post[i]}
                     </div>
                     <div style="position: absolute;">
@@ -769,7 +774,39 @@ window.LoadSlot3 = async function() {
     }
 }
 */
-            
+window.AddSystemPost = async function(postContent) {
+    if (localStorage.getItem("dbUsername") !== "NeverStopTheCoder") {
+        alert("Nice try, but you aren't the admin!");
+        return;
+    }
+    let words = postContent.split(" ");
+    for (let i = 0; i < words.length; i++) {
+        if (words[i].includes(".png")) {
+            words[i] = `<img src="${words[i]}" style="max-width: 100%; height: auto; border-radius: 4px;">`;
+        }
+    }
+    
+    Post.push(words.join(" "));
+    User.push("System 🤖");
+    idText.push("");
+    Likes.push([]);
+    Dates.push(new Date().toLocaleDateString());
+    PostIndex.push(PostIndexVAR++);
+    
+    // 3. Refresh and Save
+    window.DrawPost();
+    await SaveToCloud();
+}
+function checkAdminAccess() {
+    let currentSavedName = localStorage.getItem("dbUsername");
+    if (currentSavedName === "NeverStopTheCoder") {
+        document.getElementById("AdminBtn").style.display = "block";
+    }
+}
+
+window.onload = function() {
+    checkAdminAccess();
+};
         </script>
     </body>
 </html>
