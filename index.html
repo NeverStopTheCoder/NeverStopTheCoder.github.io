@@ -30,19 +30,19 @@
             <button onclick="SaveArt();" style="position: absolute; right: 700px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save</button>
             <button onclick="ClearArt();" style="position: absolute; right: 630px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
             <button onclick="FillArt();" style="position: absolute; right: 770px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Fill</button>
-            <button onclick="SaveSlot1();" style="position: absolute; right: 460px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot1</button>
+          <!--  <button onclick="SaveSlot1();" style="position: absolute; right: 460px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot1</button>
             <button onclick="LoadSlot1();" style="position: absolute; right: 390px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot1</button>
             <button onclick="SaveSlot2();" style="position: absolute; right: 460px; bottom: 345px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot2</button>
             <button onclick="LoadSlot2();" style="position: absolute; right: 390px; bottom: 345px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot2</button>
             <button onclick="SaveSlot3();" style="position: absolute; right: 460px; bottom: 280px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot3</button>
-            <button onclick="LoadSlot3();" style="position: absolute; right: 390px; bottom: 280px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot3</button>
+            <button onclick="LoadSlot3();" style="position: absolute; right: 390px; bottom: 280px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot3</button> -->
             <button onclick="FlipHorizontally();" style="position: absolute; right: 680px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Horizontally</button>
             <button onclick="FlipVertically();" style="position: absolute; right: 590px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Vertically</button>
             <input style="position: absolute; right: 575px; bottom: 125px"; type="color" id="ArtColor" value="#ff0000">
             <input style="position: absolute; right: 520px; bottom: 125px"; type="color" id="ArtColor2" value="#ff0000">
             <canvas id="DrawProfile" width="300" height="300" style="background-color: white; border: 2px solid black;"></canvas>
         </div>
-
+        
         <script type="module">   
             "use strict";
             let Color = "white";
@@ -76,10 +76,12 @@
             let Dates = [];
             let Blocked = [];
             let Profile = [];
+            /*
             let ProfileSlot1 = [];
             let ProfileSlot2 = [];
             let ProfileSlot3 = [];
             let ProfileUsers = [];
+            */
             let savedName = localStorage.getItem("dbUsername");
             document.getElementById("myInput2").value = savedName || "";
             
@@ -97,8 +99,9 @@
                     Dates = data.Dates || [];
                     Blocked = data.Blocked || [];
                     Profile = data.Profile || [];
-                    ProfileUsers = data.ProfileUsers || [];
+                    //ProfileUsers = data.ProfileUsers || [];
                     PostIndexVAR = Post.length;
+                    /*
                     if (ProfileSlot1.length > ProfileUsers.length) ProfileSlot1.length = ProfileUsers.length;
                     while (ProfileSlot1.length < ProfileUsers.length) ProfileSlot1.push("");
 
@@ -107,6 +110,7 @@
 
                     if (ProfileSlot3.length > ProfileUsers.length) ProfileSlot3.length = ProfileUsers.length;
                     while (ProfileSlot3.length < ProfileUsers.length) ProfileSlot3.push("");
+                    */
                 }
                 window.DrawPost(); 
                 window.checkSavedName();
@@ -123,10 +127,10 @@
                     Dates: Dates,
                     Blocked: Blocked,
                     Profile: Profile,
-                    ProfileSlot1: ProfileSlot1,
-                    ProfileSlot2: ProfileSlot2,
-                    ProfileSlot3: ProfileSlot3,
-                    ProfileUsers: ProfileUsers,
+                    //ProfileSlot1: ProfileSlot1,
+                    //ProfileSlot2: ProfileSlot2,
+                    //ProfileSlot3: ProfileSlot3,
+                    //ProfileUsers: ProfileUsers,
                 });
             }
 
@@ -233,9 +237,9 @@
                 Profile.splice(index, 1);
                 FlaggedPost.splice(index, 1);
                 FlaggedReason.splice(index, 1);
-                ProfileSlot1.splice(postIndex, 1);
-                ProfileSlot2.splice(postIndex, 1);
-                ProfileSlot3.splice(postIndex, 1);
+                //ProfileSlot1.splice(postIndex, 1);
+                //ProfileSlot2.splice(postIndex, 1);
+                //ProfileSlot3.splice(postIndex, 1);
                 for (let i = index; i < PostIndex.length; i++) {
                     PostIndex[i] -= 1;
                 }
@@ -657,6 +661,7 @@ window.FlipVertically = async function() {
         Art2.restore();
     };
 }
+/*
     window.SaveSlot1 = async function() {
     const Art = document.getElementById('DrawProfile');
     let savedName = localStorage.getItem("dbUsername");
@@ -762,6 +767,7 @@ window.LoadSlot3 = async function() {
         img.src = ProfileSlot3[userIndex];
     }
 }
+*/
             
         </script>
     </body>
