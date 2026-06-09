@@ -96,10 +96,10 @@
                     Dates = data.Dates || [];
                     Blocked = data.Blocked || [];
                     Profile = data.Profile || [];
-                    ProfileSlot1 = data.ProfileSlot1 || [];
-                    ProfileSlot2 = data.ProfileSlot2 || [];
-                    ProfileSlot3 = data.ProfileSlot3 || [];
                     PostIndexVAR = Post.length;
+                    while (ProfileSlot1.length < User.length) ProfileSlot1.push("");
+                    while (ProfileSlot2.length < User.length) ProfileSlot2.push("");
+                    while (ProfileSlot3.length < User.length) ProfileSlot3.push("");
                 }
                 window.DrawPost(); 
                 window.checkSavedName();
