@@ -29,6 +29,9 @@
             <button onclick="CloseEditor();" style="position: absolute; right: 770px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Close</button>
             <button onclick="SaveArt();" style="position: absolute; right: 700px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save</button>
             <button onclick="ClearArt();" style="position: absolute; right: 630px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
+            <button onclick="FillArt();" style="position: absolute; right: 770px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Fill</button>
+            <button onclick="FlipHorizontally();" style="position: absolute; right: 680px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Horizontally</button>
+            <button onclick="FlipVertically();" style="position: absolute; right: 590px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Vertically</button>
             <input style="position: absolute; right: 575px; bottom: 125px"; type="color" id="ArtColor" value="#ff0000">
             <input style="position: absolute; right: 520px; bottom: 125px"; type="color" id="ArtColor2" value="#ff0000">
             <canvas id="DrawProfile" width="300" height="300" style="background-color: white; border: 2px solid black;"></canvas>
@@ -541,6 +544,30 @@
     }
     window.DrawPost();
     await SaveToCloud();
+    }
+    window.FillArt = async function() {
+    const Art = document.getElementById('DrawProfile');
+    const Art2 = Art.getContext('2d'); 
+    Art2.fillStyle = document.getElementById("ArtColor").value;
+    Art2.fillRect(0, 0, 300, 300);
+    }
+    window.FlipHorizontally = async function() {
+    const Art = document.getElementById('DrawProfile');
+    const Art2 = Art.getContext('2d');
+    if (Art.style.transform === "scaleX(-1)") {
+    Art.style.transform = "scaleX(1)";
+    } else {
+    Art.style.transform = "scaleX(-1)";
+    }
+    }
+    window.FlipVertically = async function() {
+    const Art = document.getElementById('DrawProfile');
+    const Art2 = Art.getContext('2d'); 
+    if (Art.style.transform === "scaleY(-1)") {
+    Art.style.transform = "scaleY(1)";
+    } else {
+    Art.style.transform = "scaleY(-1)";
+    }
     }
             
         </script>
