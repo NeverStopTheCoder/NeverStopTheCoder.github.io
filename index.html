@@ -154,6 +154,7 @@
             return; 
         }
                     localStorage.setItem("dbUsername", name);
+                    post = post.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     let words = post.split(" ");
                     for (let i = 0; i < words.length; i++) {
                         if (words[i].startsWith("http") && words[i].endsWith(".png") && !words[i].includes('"') && !words[i].includes("'")) {
