@@ -275,6 +275,9 @@
                     continue
                     } else if (idText[i] && idText[i].includes("%Pin%"))  {
                     let DisplayName = Mods.includes(User[i]) ? User[i] + " 🛡️" : User[i];
+                    if (User[i] == "System") {
+                        DisplayName = User[i] + " 🤖"
+                    }
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -295,7 +298,7 @@
                     </div>
                     <div style="position: absolute;">
                                 ${
-    (User[i] === "System 🤖") 
+    (User[i] === "System") 
     ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #333; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">S</div>`
     : (Profile[i] === "D" || !Profile[i] || Profile[i] == null)
         ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #8a8a8a; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">D</div>`
@@ -311,6 +314,9 @@
                     continue
                     } else if (idText[i] && !idText[i].includes("%Pin%")) {
                     let DisplayName = Mods.includes(User[i]) ? User[i] + " 🛡️" : User[i];
+                    if (User[i] == "System") {
+                        DisplayName = User[i] + " 🤖"
+                    }
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
                         <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -330,7 +336,7 @@
                     </div>
                     <div style="position: absolute;">
                                 ${
-    (User[i] === "System 🤖") 
+    (User[i] === "System") 
     ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #333; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">S</div>`
     : (Profile[i] === "D" || !Profile[i] || Profile[i] == null)
         ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #8a8a8a; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">D</div>`
@@ -809,7 +815,7 @@ window.AddSystemPost = async function(postContent) {
     }
     
     Post.push(words.join(" "));
-    User.push("System 🤖");
+    User.push("System");
     idText.push("System");
     Likes.push([]);
     Dates.push(new Date().toLocaleDateString());
