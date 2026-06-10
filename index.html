@@ -185,6 +185,12 @@
            window.getChoice = function(Choice) {
     // 1. Clean up the search input (removes sneaky spaces/newlines from the textarea)
     let cleanChoice = Choice.trim().toLowerCase();
+    let AtName = ""
+    if (Choice[0] == "@") {
+    AtName = Choice.replace("@","")
+    }else {
+    AtName = Choice
+    }
     
     document.getElementById("Draw2").innerHTML = "";
     
@@ -218,6 +224,15 @@
             
         // Handle regular category searches (ignores flagged entries unless specified)
         } else if (!currentId.includes("%flagged%") && (idText[i] == Choice || idText[i].includes(Choice) || currentId.includes(cleanChoice))) {
+            document.getElementById("Draw2").innerHTML += `
+            <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
+                <h3>${User[i] || 'User'}:</h3>
+                <p>${Post[i]}</p>
+                <span>${idText[i]}</span>
+            </div>
+            `;
+            continue;
+        } else if (User[i] == AtName && !idText[i].includes("%Flagged%") && !idText[i].includes("%flagged%")) {
             document.getElementById("Draw2").innerHTML += `
             <div style="background-color:gray; display: block; width: 200px; padding: 15px; padding-right: 120px; border-radius:5px; margin-bottom: 15px;">
                 <h3>${User[i] || 'User'}:</h3>
