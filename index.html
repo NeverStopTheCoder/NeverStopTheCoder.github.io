@@ -156,7 +156,7 @@
                     localStorage.setItem("dbUsername", name);
                     let words = post.split(" ");
                     for (let i = 0; i < words.length; i++) {
-                        if (words[i].includes(".png")) {
+                        if (words[i].startsWith("http") && words[i].endsWith(".png") && !words[i].includes('"') && !words[i].includes("'")) {
                             words[i] = `<img src="${words[i]}" style="max-width: 100%; height: auto; border-radius: 4px;">`;
                         }
                     }
