@@ -32,7 +32,11 @@
             <button onclick="SaveArt();" style="position: absolute; right: 700px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save</button>
             <button onclick="ClearArt();" style="position: absolute; right: 630px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
             <button onclick="FillArt();" style="position: absolute; right: 770px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Fill</button>
-          <!--  <button onclick="SaveSlot1();" style="position: absolute; right: 460px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot1</button>
+            <button onclick="DrawCircle();" style="position: absolute; right: 520px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Draw Circle</button>
+            <button onclick="AddCustomEmoji();" style="position: absolute; right: 505px; bottom: 50px; width: 160px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Make as Custom Emoji</button>
+            <input style="position: absolute; right: 670px; bottom: 50px; width: 30px;" min="0" max="10" type="number" id="Radius" name="quantity">
+            <h3 style="position:absolute; right: 710px; bottom: 30px;">Circle Radius:</h3>
+            <!--  <button onclick="SaveSlot1();" style="position: absolute; right: 460px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot1</button>
             <button onclick="LoadSlot1();" style="position: absolute; right: 390px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot1</button>
             <button onclick="SaveSlot2();" style="position: absolute; right: 460px; bottom: 345px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot2</button>
             <button onclick="LoadSlot2();" style="position: absolute; right: 390px; bottom: 345px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot2</button>
@@ -79,6 +83,7 @@
             let Blocked = [];
             let Profile = [];
             let Mods = ["NeverStopTheCoder"];
+            let CustomEmojis = [];
             /*
             let ProfileSlot1 = [];
             let ProfileSlot2 = [];
@@ -102,6 +107,7 @@
                     Dates = data.Dates || [];
                     Blocked = data.Blocked || [];
                     Profile = data.Profile || [];
+                    CustomEmojis = data.CustomEmojis || [];
                     //ProfileUsers = data.ProfileUsers || [];
                     PostIndexVAR = Post.length;
                     /*
@@ -130,6 +136,7 @@
                     Dates: Dates,
                     Blocked: Blocked,
                     Profile: Profile,
+                    CustomEmojis: CustomEmojis,
                     //ProfileSlot1: ProfileSlot1,
                     //ProfileSlot2: ProfileSlot2,
                     //ProfileSlot3: ProfileSlot3,
@@ -154,7 +161,6 @@
             return; 
         }
                     localStorage.setItem("dbUsername", name);
-                    post = post.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     let words = post.split(" ");
                     for (let i = 0; i < words.length; i++) {
                         if (words[i].startsWith("http") && words[i].endsWith(".png") && !words[i].includes('"') && !words[i].includes("'")) {
@@ -276,6 +282,17 @@
                     continue
                     } else if (idText[i] && idText[i].includes("%Pin%"))  {
                     let DisplayName = Mods.includes(User[i]) ? User[i] + " 🛡️" : User[i];
+                    let userEmoji = "";
+                    let temporaryPostText = Post[i];
+                    for (let j = 0; j < CustomEmojis.length; j++) {
+                        let Name = CustomEmojis[j].split("|")
+                        if (Name[1] == User[i]) {
+                            userEmoji = `<img src="${Name[0]}" style="max-width: 45px; height: auto; border-radius: 0px;">`
+                        if (temporaryPostText.includes(":ce:") && userEmoji !== "") { 
+                            temporaryPostText = temporaryPostText.replaceAll(":ce:", userEmoji); 
+                        }
+                        }
+                    }
                     if (User[i] == "System") {
                         DisplayName = User[i] + " 🤖"
                     }
@@ -295,7 +312,7 @@
                         </div>
                         <span style="font-size: 13px; color: gray; font-weight: bold;">Pinned 📌</span>
                         <h3>${DisplayName}:</h3>
-                        ${Post[i]}
+                        ${temporaryPostText}
                     </div>
                     <div style="position: absolute;">
                                 ${
@@ -315,6 +332,17 @@
                     continue
                     } else if (idText[i] && !idText[i].includes("%Pin%")) {
                     let DisplayName = Mods.includes(User[i]) ? User[i] + " 🛡️" : User[i];
+                    let userEmoji = "";
+                    let temporaryPostText = Post[i];
+                    for (let j = 0; j < CustomEmojis.length; j++) {
+                        let Name = CustomEmojis[j].split("|")
+                        if (Name[1] == User[i]) {
+                            userEmoji = `<img src="${Name[0]}" style="max-width: 45px; height: auto; border-radius: 0px;">`
+                        if (temporaryPostText.includes(":ce:") && userEmoji !== "") { 
+                            temporaryPostText = temporaryPostText.replaceAll(":ce:", userEmoji); 
+                        }
+                        }
+                    }
                     if (User[i] == "System") {
                         DisplayName = User[i] + " 🤖"
                     }
@@ -333,7 +361,7 @@
                             <span style=" font-size: 13px; color: gray;">Date:${(Dates[i] || "No Date")}</span>
                         </div>
                         <h3>${DisplayName}:</h3>
-                        ${Post[i]}
+                        ${temporaryPostText}
                     </div>
                     <div style="position: absolute;">
                                 ${
@@ -696,6 +724,30 @@ window.FlipVertically = async function() {
         Art2.restore();
     };
 }
+ window.DrawCircle = async function() {
+    const Art = document.getElementById('DrawProfile');
+    const Art2 = Art.getContext('2d'); 
+    Art2.fillStyle = document.getElementById("ArtColor").value;
+    let Radius = document.getElementById("Radius").value;
+    let CenterX = 150
+    let CenterY = 150
+    let DistanceX = 0
+    let DistanceY = 0
+    let TotalDistance = 0
+    Radius = Radius * 20
+    for (let y = 0; y < Art.height; y += 20) {
+    for (let x = 0; x < Art.width; x += 20) {
+        DistanceX = CenterX - x
+        DistanceY = CenterY - y
+        DistanceX = DistanceX * DistanceX
+        DistanceY = DistanceY * DistanceY
+        TotalDistance = DistanceX += DistanceY
+        if (TotalDistance < Radius * Radius) {
+            Art2.fillRect(x, y, 20, 20);
+        }
+    }
+    }
+}
 /*
     window.SaveSlot1 = async function() {
     const Art = document.getElementById('DrawProfile');
@@ -835,6 +887,24 @@ window.onload = function() {
     LoadFromCloud();
     checkAdminAccess();
 };
+window.AddCustomEmoji = async function() {
+const Art = document.getElementById('DrawProfile');
+let ArtImage = Art.toDataURL();
+let savedName = localStorage.getItem("dbUsername");
+let userFound = false;
+for (let i = 0; i < CustomEmojis.length; i++) {
+let Name = CustomEmojis[i].split("|")
+if (Name[1] == savedName) {
+CustomEmojis[i] = ArtImage + "|" + savedName
+userFound = true;
+}
+}
+if (userFound == false) {
+CustomEmojis.push(ArtImage + "|" + savedName)
+}
+window.DrawPost();
+await SaveToCloud();
+}
         </script>
     </body>
 </html>
