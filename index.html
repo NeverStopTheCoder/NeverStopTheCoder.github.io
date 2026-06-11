@@ -691,6 +691,12 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
         window.Eraser()
         }
     };
+    Art.onwheel = (event) => {
+        let color1 = document.getElementById('ArtColor').value;
+        let color2 = document.getElementById('ArtColor2').value;
+        document.getElementById('ArtColor2').value = color1;
+        document.getElementById('ArtColor').value = color2;
+    };
     }
     window.CloseEditor = async function() {
     document.getElementById("Profile").style.display = "none";
