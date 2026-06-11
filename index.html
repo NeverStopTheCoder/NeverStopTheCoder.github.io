@@ -16,24 +16,26 @@
         <h1 style="position:absolute; right: 570px; top: -5px;">Search</h1>
         <button onclick="getChoice(document.getElementById('SearchInput').value);" style="position: absolute; right: 510px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Search</button>
         <button id="ChangeName"; onclick="ChangeName();" style="position: absolute; right: 170px; bottom: 100px; width: 100px; height: 60px; Font-Size:23px; background-color:gray; color:white; border-radius:5px; display:none;">Change Name</button>
-        <button onclick="ClearText();" style="position: absolute; right: 665px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
+        <button onclick="ClearText();"style="position: absolute; right: 665px; top: 25px; width: 60px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
         <input style="position: absolute; right: 70px; bottom: 230px"; type="color" id="BackgroundColor" value="#ff0000" onchange="ChangeBackground()">
          <h2 style="position:absolute; right: 10px; bottom: 240px;">BackGround Color</h2>
         <input style="position: absolute; right: 270px; bottom: 230px"; type="color" id="TextBoxColor" value="#ff0000" onchange="ChangeTextBox()">
         <button id="AdminBtn" style="position: absolute; top: 55px; display: none;" onclick="AddSystemPost(prompt('System Message:'));">
          📢 Post as System</button>
          <h2 style="position:absolute; right: 230px; bottom: 240px;">Text Box Color</h2>
-        <button onclick="OpenEditor();" style="position: absolute; right: 105px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Change Profile</button>
+        <button onclick="OpenEditor();"style="position: absolute; right: 105px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Change Profile</button>
         <h3 style="position:absolute; right: 310px; top: 5px;">🛡️ = Mods 🤖 = System</h3>
         <div id="Draw"></div>
         <div style="position: absolute; right: 450px; top: 80px;" id="Draw2"></div>
-        <div id="Profile" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: powderblue; z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-            <button onclick="CloseEditor();" style="position: absolute; right: 770px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Close</button>
-            <button onclick="SaveArt();" style="position: absolute; right: 700px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save</button>
-            <button onclick="ClearArt();" style="position: absolute; right: 630px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
-            <button onclick="FillArt();" style="position: absolute; right: 770px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Fill</button>
-            <button onclick="DrawCircle();" style="position: absolute; right: 520px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Draw Circle</button>
-            <button onclick="AddCustomEmoji();" style="position: absolute; right: 505px; bottom: 50px; width: 160px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Make as Custom Emoji</button>
+        <div id="Profile"style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: powderblue; z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+            <button onclick="CloseEditor();"style="position: absolute; right: 770px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Close</button>
+            <button onclick="SaveArt();"style="position: absolute; right: 700px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save</button>
+            <button onclick="ClearArt();"style="position: absolute; right: 630px; bottom: 120px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Clear</button>
+            <button onclick="FillArt();"style="position: absolute; right: 770px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Fill</button>
+            <button onclick="DrawCircle();"style="position: absolute; right: 520px; bottom: 75px; width: 60px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Draw Circle</button>
+            <button onclick="AddCustomEmoji();"style="position: absolute; right: 505px; bottom: 50px; width: 160px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Make as Custom Emoji</button>
+            <button onclick="LoadCustomEmoji();"style="position: absolute; right: 495px; bottom: 30px; width: 130px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Custom Emoji</button>
+            <!-- <button onclick="DrawBigImage();" style="position: absolute; right: 495px; bottom: 30px; width: 130px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Draw Big Image</button> -->
             <input style="position: absolute; right: 670px; bottom: 50px; width: 30px;" min="0" max="10" type="number" id="Radius" name="quantity">
             <h3 style="position:absolute; right: 710px; bottom: 30px;">Circle Radius:</h3>
             <!--  <button onclick="SaveSlot1();" style="position: absolute; right: 460px; bottom: 410px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot1</button>
@@ -42,14 +44,25 @@
             <button onclick="LoadSlot2();" style="position: absolute; right: 390px; bottom: 345px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot2</button>
             <button onclick="SaveSlot3();" style="position: absolute; right: 460px; bottom: 280px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Save To Slot3</button>
             <button onclick="LoadSlot3();" style="position: absolute; right: 390px; bottom: 280px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot3</button> -->
-            <button onclick="FlipHorizontally();" style="position: absolute; right: 680px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Horizontally</button>
-            <button onclick="FlipVertically();" style="position: absolute; right: 590px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Vertically</button>
-            <button onclick="DrawSqaure();" style="position: absolute; right: 730px; bottom: 30px; width: 100px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Draw Sqaure</button>
+            <button onclick="FlipHorizontally();"style="position: absolute; right: 680px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Horizontally</button>
+            <button onclick="FlipVertically();"style="position: absolute; right: 590px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Vertically</button>
+            <button onclick="DrawSqaure();"style="position: absolute; right: 730px; bottom: 30px; width: 100px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Draw Sqaure</button>
             <input style="position: absolute; right: 575px; bottom: 125px"; type="color" id="ArtColor" value="#ff0000">
             <input style="position: absolute; right: 520px; bottom: 125px"; type="color" id="ArtColor2" value="#ff0000">
             <button onclick="Eraser();" style="position: absolute; right: 665px; bottom: 30px; width: 60px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Eraser</button>
             <h3 id="EraserOnCheck" style="position:absolute; right: 625px; bottom: 8px;">OFF</h3>
-
+            
+            <div id="AB">
+            <button onclick="OpenAnimation();"style="position: absolute; right: 675px; top: 140px; width: 160px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Open Animation Editor</button>
+            </div>
+            
+            <div id="A" style="display: none;">
+            <button onclick="Frame1();"style="position: absolute; right: 750px; top: 140px; width: 80px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Frame 1</button>
+            <button onclick="Frame2();"style="position: absolute; right: 650px; top: 140px; width: 80px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Frame 2</button>
+            <button onclick="CloseAnimation();"style="position: absolute; right: 550px; top: 140px; width: 80px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Close</button>
+            <button onclick="AddAnimation();"style="position: absolute; right: 600px; top: 120px; width: 200px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Make As Custom Animation</button>
+            </div>
+            
             <div id="l2" style="width: 302px;
   height: 302px; background-image: 
     linear-gradient(45deg, #aaa 25%, transparent 25%), 
@@ -97,6 +110,9 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
             let Profile = [];
             let Mods = ["NeverStopTheCoder"];
             let CustomEmojis = [];
+            let CustomEmojisFrame1 = [];
+            let CustomEmojisFrame2 = [];
+            let CustomEmojisAnimation = [];
             /*
             let ProfileSlot1 = [];
             let ProfileSlot2 = [];
@@ -121,6 +137,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                     Blocked = data.Blocked || [];
                     Profile = data.Profile || [];
                     CustomEmojis = data.CustomEmojis || [];
+                    CustomEmojisAnimation = data.CustomEmojisAnimation || [];
                     //ProfileUsers = data.ProfileUsers || [];
                     PostIndexVAR = Post.length;
                     /*
@@ -150,6 +167,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                     Blocked: Blocked,
                     Profile: Profile,
                     CustomEmojis: CustomEmojis,
+                    CustomEmojisAnimation: CustomEmojisAnimation,
                     //ProfileSlot1: ProfileSlot1,
                     //ProfileSlot2: ProfileSlot2,
                     //ProfileSlot3: ProfileSlot3,
@@ -306,8 +324,17 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                         }
                         }
                     }
+                    for (let j = 0; j < CustomEmojisAnimation.length; j++) {
+                        let Name = CustomEmojisAnimation[j].split("|")
+                        if (Name[2] == User[i]) {
+                            userEmoji = `<span onmouseover="this.loop = setInterval(() => { for(let c of this.children) c.style.display = c.style.display === 'none' ? 'inline-block' : 'none'; }, 100);" onmouseout="clearInterval(this.loop); this.children[0].style.display='inline-block'; this.children[1].style.display = 'none';"><img src="${Name[0]}" style="display: inline-block; max-width: 45px; height: auto; border-radius: 0px;"> <img src="${Name[1]}" style="display: none; max-width: 45px; height: auto; border-radius: 0px;"></span>`
+                        if (temporaryPostText.includes(":cea:") && userEmoji !== "") { 
+                            temporaryPostText = temporaryPostText.replaceAll(":cea:", userEmoji); 
+                        }
+                        }
+                    }
                     if (User[i] == "System") {
-                        DisplayName = User[i] + " 🤖🛡️"
+                        DisplayName = User[i] + " 🤖"
                     }
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
@@ -356,8 +383,17 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                         }
                         }
                     }
+                    for (let j = 0; j < CustomEmojisAnimation.length; j++) {
+                        let Name = CustomEmojisAnimation[j].split("|")
+                        if (Name[2] == User[i]) {
+                            userEmoji = `<span onmouseover="this.loop = setInterval(() => { for(let c of this.children) c.style.display = c.style.display === 'none' ? 'inline-block' : 'none'; }, 100);" onmouseout="clearInterval(this.loop); this.children[0].style.display='inline-block'; this.children[1].style.display = 'none';"><img src="${Name[0]}" style="display: inline-block; max-width: 45px; height: auto; border-radius: 0px;"> <img src="${Name[1]}" style="display: none; max-width: 45px; height: auto; border-radius: 0px;"></span>`
+                        if (temporaryPostText.includes(":cea:") && userEmoji !== "") { 
+                            temporaryPostText = temporaryPostText.replaceAll(":cea:", userEmoji); 
+                        }
+                        }
+                    } 
                     if (User[i] == "System") {
-                        DisplayName = User[i] + " 🤖🛡️"
+                        DisplayName = User[i] + " 🤖"
                     }
                     document.getElementById("Draw").innerHTML += `
                     <div style="background-color:${Color}; display: block; width: 400px; padding: 15px; border-radius:5px; margin-bottom: 15px; padding-right: 90px">
@@ -653,7 +689,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
     await SaveToCloud();
     
 }
-    window.OpenEditor = async function() {
+    window.OpenEditor = function() {
     document.getElementById("Profile").style.display = "flex";
         const Art = document.getElementById('DrawProfile');
         const Art2 = Art.getContext('2d');
@@ -698,10 +734,10 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
         document.getElementById('ArtColor').value = color2;
     };
     }
-    window.CloseEditor = async function() {
+    window.CloseEditor = function() {
     document.getElementById("Profile").style.display = "none";
     }
-    window.ClearArt = async function() {
+    window.ClearArt = function() {
     document.getElementById("Profile").style.display = "flex";
         const Art = document.getElementById('DrawProfile');
         const Art2 = Art.getContext('2d');
@@ -720,13 +756,13 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
     window.DrawPost();
     await SaveToCloud();
     }
-    window.FillArt = async function() {
+    window.FillArt = function() {
     const Art = document.getElementById('DrawProfile');
     const Art2 = Art.getContext('2d'); 
     Art2.fillStyle = document.getElementById("ArtColor").value;
     Art2.fillRect(0, 0, 300, 300);
     }
-    window.FlipHorizontally = async function() {
+    window.FlipHorizontally = function() {
     const Art = document.getElementById('DrawProfile');
     const Art2 = Art.getContext('2d');
     const img = new Image();
@@ -741,7 +777,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
     };
 }
 
-window.FlipVertically = async function() {
+window.FlipVertically = function() {
     const Art = document.getElementById('DrawProfile');
     const Art2 = Art.getContext('2d'); 
     const img = new Image();
@@ -755,7 +791,7 @@ window.FlipVertically = async function() {
         Art2.restore();
     };
 }
- window.DrawCircle = async function() {
+ window.DrawCircle = function() {
     const Art = document.getElementById('DrawProfile');
     const Art2 = Art.getContext('2d'); 
     Art2.fillStyle = document.getElementById("ArtColor").value;
@@ -779,7 +815,7 @@ window.FlipVertically = async function() {
     }
     }
 }
-    window.Eraser = async function() {
+    window.Eraser = function() {
     if (EraserOn == false) {
         EraserOn = true
         document.getElementById('EraserOnCheck').innerText = "ON";
@@ -789,7 +825,7 @@ window.FlipVertically = async function() {
         document.getElementById('EraserOnCheck').innerText = "OFF"
     }
     }
-window.DrawSqaure = async function() {
+window.DrawSqaure = function() {
     const Art = document.getElementById('DrawProfile');
     const Art2 = Art.getContext('2d'); 
     Art2.fillStyle = document.getElementById("ArtColor").value;
@@ -953,6 +989,101 @@ alert("Image Set As Custom Emoji")
 window.DrawPost();
 await SaveToCloud();
 }
+window.LoadCustomEmoji = function() {
+const Art = document.getElementById('DrawProfile');
+const Art2 = Art.getContext('2d'); 
+const img = new Image();
+let savedName = localStorage.getItem("dbUsername");
+for (let i = 0; i < CustomEmojis.length; i++) {
+let Name = CustomEmojis[i].split("|")
+if (Name[1] == savedName) {
+img.onload = function() {
+Art2.clearRect(0, 0, 300, 300);
+Art2.drawImage(img, 0, 0);
+alert("Loaded Custom Emoji")
+window.DrawPost();
+}
+img.src = Name[0]
+break;
+}
+}
+}
+window.OpenAnimation = function() {
+    document.getElementById("A").style.display = "flex";
+    document.getElementById("AB").style.display = "none";
+}
+window.CloseAnimation = function() {
+    document.getElementById("A").style.display = "none";
+    document.getElementById("AB").style.display = "flex";
+}
+window.AddAnimation = function() {
+let Frame1 = 0
+let Frame2 = 0
+let savedName = localStorage.getItem("dbUsername");
+let userFound = false;
+for (let i = 0; i < CustomEmojisFrame1.length; i++) {
+let Name = CustomEmojisFrame1[i].split("|")
+if (Name[1] == savedName) {
+Frame1 = Name[0]
+}
+}
+for (let i = 0; i < CustomEmojisFrame2.length; i++) {
+let Name = CustomEmojisFrame2[i].split("|")
+if (Name[1] == savedName) {
+Frame2 = Name[0]
+}
+}
+for (let i = 0; i < CustomEmojisAnimation.length; i++) {
+let AnimationData = CustomEmojisAnimation[i].split("|")
+if (AnimationData[2] == savedName) {
+CustomEmojisAnimation[i] = Frame1 + "|" + Frame2 + "|" + savedName
+userFound = true;
+}
+}
+if (userFound == false) {
+CustomEmojisAnimation.push(Frame1 + "|" + Frame2 + "|" + savedName)
+}
+alert("Set Animation")
+window.DrawPost();
+await SaveToCloud();
+}
+window.Frame1 = function() {
+const Art = document.getElementById('DrawProfile');
+let ArtImage = Art.toDataURL();
+let savedName = localStorage.getItem("dbUsername");
+let userFound = false;
+for (let i = 0; i < CustomEmojisFrame1.length; i++) {
+let Name = CustomEmojisFrame1[i].split("|")
+if (Name[1] == savedName) {
+CustomEmojisFrame1[i] = ArtImage + "|" + savedName
+userFound = true;
+}
+}
+if (userFound == false) {
+CustomEmojisFrame1.push(ArtImage + "|" + savedName)
+}
+alert("Set Image to Frame 1")
+window.DrawPost();
+};
+
+window.Frame2 = function() {
+const Art = document.getElementById('DrawProfile');
+let ArtImage = Art.toDataURL();
+let savedName = localStorage.getItem("dbUsername");
+let userFound = false;
+for (let i = 0; i < CustomEmojisFrame2.length; i++) {
+let Name = CustomEmojisFrame2[i].split("|")
+if (Name[1] == savedName) {
+CustomEmojisFrame2[i] = ArtImage + "|" + savedName
+userFound = true;
+}
+}
+if (userFound == false) {
+CustomEmojisFrame2.push(ArtImage + "|" + savedName)
+}
+alert("Set Image to Frame 2")
+window.DrawPost();
+};
         </script>
     </body>
 </html>
