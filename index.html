@@ -44,6 +44,7 @@
             <button onclick="LoadSlot3();" style="position: absolute; right: 390px; bottom: 280px; width: 60px; height: 60px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Load Slot3</button> -->
             <button onclick="FlipHorizontally();" style="position: absolute; right: 680px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Horizontally</button>
             <button onclick="FlipVertically();" style="position: absolute; right: 590px; bottom: 75px; width: 80px; height: 40px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Flip Vertically</button>
+            <button onclick="DrawSqaure();" style="position: absolute; right: 730px; bottom: 30px; width: 100px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Draw Sqaure</button>
             <input style="position: absolute; right: 575px; bottom: 125px"; type="color" id="ArtColor" value="#ff0000">
             <input style="position: absolute; right: 520px; bottom: 125px"; type="color" id="ArtColor2" value="#ff0000">
             <canvas id="DrawProfile" width="300" height="300" style="background-color: white; border: 2px solid black;"></canvas>
@@ -747,6 +748,12 @@ window.FlipVertically = async function() {
         }
     }
     }
+}
+window.DrawSqaure = async function() {
+    const Art = document.getElementById('DrawProfile');
+    const Art2 = Art.getContext('2d'); 
+    Art2.fillStyle = document.getElementById("ArtColor").value;
+    Art2.fillRect(80, 80, 140, 140);
 }
 /*
     window.SaveSlot1 = async function() {
