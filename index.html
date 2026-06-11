@@ -58,6 +58,7 @@
             
             <div id="A" style="display: none;">
             <button onclick="Frame1();"style="position: absolute; right: 750px; top: 140px; width: 80px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Frame 1</button>
+            <button onclick="AnimateProfile();"style="position: absolute; right: 600px; top: 100px; width: 200px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Set Animation To Profile</button>
             <button onclick="Frame2();"style="position: absolute; right: 650px; top: 140px; width: 80px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Frame 2</button>
             <button onclick="CloseAnimation();"style="position: absolute; right: 550px; top: 140px; width: 80px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Close</button>
             <button onclick="AddAnimation();"style="position: absolute; right: 600px; top: 120px; width: 200px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Make As Custom Animation</button>
@@ -113,6 +114,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
             let CustomEmojisFrame1 = [];
             let CustomEmojisFrame2 = [];
             let CustomEmojisAnimation = [];
+            let CustomProfileAnimations = [];
             /*
             let ProfileSlot1 = [];
             let ProfileSlot2 = [];
@@ -138,6 +140,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                     Profile = data.Profile || [];
                     CustomEmojis = data.CustomEmojis || [];
                     CustomEmojisAnimation = data.CustomEmojisAnimation || [];
+                    CustomProfileAnimations = data.CustomProfileAnimations || [];
                     //ProfileUsers = data.ProfileUsers || [];
                     PostIndexVAR = Post.length;
                     /*
@@ -168,6 +171,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                     Profile: Profile,
                     CustomEmojis: CustomEmojis,
                     CustomEmojisAnimation: CustomEmojisAnimation,
+                    CustomProfileAnimations: CustomProfileAnimations,
                     //ProfileSlot1: ProfileSlot1,
                     //ProfileSlot2: ProfileSlot2,
                     //ProfileSlot3: ProfileSlot3,
@@ -318,6 +322,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                     let DisplayName = Mods.includes(User[i]) ? User[i] + " 🛡️" : User[i];
                     let userEmoji = "";
                     let temporaryPostText = Post[i];
+                    let animatedProfileMarkup = ""
                     for (let j = 0; j < CustomEmojis.length; j++) {
                         let Name = CustomEmojis[j].split("|")
                         if (Name[1] == User[i]) {
@@ -334,6 +339,12 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                         if (temporaryPostText.includes(":cea:") && userEmoji !== "") { 
                             temporaryPostText = temporaryPostText.replaceAll(":cea:", userEmoji); 
                         }
+                        }
+                    }
+                    for (let j = 0; j < CustomProfileAnimations.length; j++) {
+                        let Name = CustomProfileAnimations[j].split("|")
+                        if (Name[2] == User[i]) {
+                            animatedProfileMarkup = `<span onmouseover="this.loop = setInterval(() => { for(let c of this.children) c.style.display = c.style.display === 'none' ? 'inline-block' : 'none'; }, 100);" onmouseout="clearInterval(this.loop); this.children[0].style.display='inline-block'; this.children[1].style.display = 'none';"><img src="${Name[0]}" style="display: inline-block; position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; border-radius: 8px; border: 2px solid gray; background-color: white; object-fit: contain;"> <img src="${Name[1]}" style="display: none; position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; border-radius: 8px; border: 2px solid gray; background-color: white; object-fit: contain;"></span>`;
                         }
                     }
                     if (User[i] == "System") {
@@ -361,6 +372,8 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                                 ${
     (User[i] === "System") 
     ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #333; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">S</div>`
+    : (animatedProfileMarkup !== "")
+        ? animatedProfileMarkup
     : (Profile[i] === "D" || !Profile[i] || Profile[i] == null)
         ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #8a8a8a; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">D</div>`
         : `<img src="${Profile[i]}" style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; border-radius: 8px; border: 2px solid gray; background-color: white; object-fit: contain;">`
@@ -377,6 +390,7 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                     let DisplayName = Mods.includes(User[i]) ? User[i] + " 🛡️" : User[i];
                     let userEmoji = "";
                     let temporaryPostText = Post[i];
+                    let animatedProfileMarkup = ""
                     for (let j = 0; j < CustomEmojis.length; j++) {
                         let Name = CustomEmojis[j].split("|")
                         if (Name[1] == User[i]) {
@@ -395,6 +409,12 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                         }
                         }
                     } 
+                    for (let j = 0; j < CustomProfileAnimations.length; j++) {
+                        let Name = CustomProfileAnimations[j].split("|")
+                        if (Name[2] == User[i]) {
+                            animatedProfileMarkup = `<span onmouseover="this.loop = setInterval(() => { for(let c of this.children) c.style.display = c.style.display === 'none' ? 'inline-block' : 'none'; }, 100);" onmouseout="clearInterval(this.loop); this.children[0].style.display='inline-block'; this.children[1].style.display = 'none';"><img src="${Name[0]}" style="display: inline-block; position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; border-radius: 8px; border: 2px solid gray; background-color: white; object-fit: contain;"> <img src="${Name[1]}" style="display: none; position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; border-radius: 8px; border: 2px solid gray; background-color: white; object-fit: contain;"></span>`
+                        }
+                    }
                     if (User[i] == "System") {
                         DisplayName = User[i] + " 🤖"
                     }
@@ -419,6 +439,8 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
                                 ${
     (User[i] === "System") 
     ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #333; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">S</div>`
+    : (animatedProfileMarkup !== "")
+        ? animatedProfileMarkup
     : (Profile[i] === "D" || !Profile[i] || Profile[i] == null)
         ? `<div style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; background-color: #8a8a8a; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; font-weight: bold; font-size: 20px; border: 2px solid gray;">D</div>`
         : `<img src="${Profile[i]}" style="position: relative; bottom: 70px; right: -450px; width: 45px; height: 45px; border-radius: 8px; border: 2px solid gray; background-color: white; object-fit: contain;">`
@@ -1087,6 +1109,37 @@ CustomEmojisFrame2.push(ArtImage + "|" + savedName)
 alert("Set Image to Frame 2")
 window.DrawPost();
 };
+window.AnimateProfile = async function() {
+let Frame1 = 0
+let Frame2 = 0
+let savedName = localStorage.getItem("dbUsername");
+let userFound = false;
+for (let i = 0; i < CustomEmojisFrame1.length; i++) {
+let Name = CustomEmojisFrame1[i].split("|")
+if (Name[1] == savedName) {
+Frame1 = Name[0]
+}
+}
+for (let i = 0; i < CustomEmojisFrame2.length; i++) {
+let Name = CustomEmojisFrame2[i].split("|")
+if (Name[1] == savedName) {
+Frame2 = Name[0]
+}
+}
+for (let i = 0; i < CustomProfileAnimations.length; i++) {
+let AnimationData = CustomProfileAnimations[i].split("|")
+if (AnimationData[2] == savedName) {
+CustomProfileAnimations[i] = Frame1 + "|" + Frame2 + "|" + savedName
+userFound = true;
+}
+}
+if (userFound == false) {
+CustomProfileAnimations.push(Frame1 + "|" + Frame2 + "|" + savedName)
+}
+alert("Set Animation")
+window.DrawPost();
+await SaveToCloud();
+}
         </script>
     </body>
 </html>
