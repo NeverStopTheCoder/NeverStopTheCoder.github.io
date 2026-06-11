@@ -47,12 +47,24 @@
             <button onclick="DrawSqaure();" style="position: absolute; right: 730px; bottom: 30px; width: 100px; height: 20px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Draw Sqaure</button>
             <input style="position: absolute; right: 575px; bottom: 125px"; type="color" id="ArtColor" value="#ff0000">
             <input style="position: absolute; right: 520px; bottom: 125px"; type="color" id="ArtColor2" value="#ff0000">
-            <canvas id="DrawProfile" width="300" height="300" style="background-color: white; border: 2px solid black;"></canvas>
+            <button onclick="Eraser();" style="position: absolute; right: 665px; bottom: 30px; width: 60px; height: 19px; Font-Size:13px; background-color:gray; color:white; border-radius:5px;">Eraser</button>
+            <h3 id="EraserOnCheck" style="position:absolute; right: 625px; bottom: 8px;">OFF</h3>
+
+            <div id="l2" style="width: 302px;
+  height: 302px; background-image: 
+    linear-gradient(45deg, #aaa 25%, transparent 25%), 
+    linear-gradient(-45deg, #aaa 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #aaa 75%), 
+    linear-gradient(-45deg, transparent 75%, #aaa 75%);
+background-size: 20px 20px;
+background-position: 2px 2px, 2px 12px, 12px -8px, -7px 2px;">
+            <canvas id="DrawProfile" width="300" height="300" style="border: 2px solid black;"></canvas>
+            </div>
         </div>
-        
         <script type="module">   
             "use strict";
             let Color = "white";
+            let EraserOn = false
             
             // 1. Core Firebase Cloud Drivers
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -652,7 +664,11 @@
     ClickX = Math.floor(ClickX / 20) * 20;
     ClickY = Math.floor(ClickY / 20) * 20;
     if (ClickX < 300 && ClickY <= 300 && ClickX >= 0 && ClickY >= 0) {
+        if (EraserOn == false) {
         Art2.fillRect(ClickX, ClickY, 20, 20);
+        }else if (EraserOn == true) {
+        Art2.clearRect(ClickX, ClickY, 20, 20);
+        }
     }
     };
      Art.oncontextmenu = (event) => {
@@ -663,7 +679,11 @@
     ClickX = Math.floor(ClickX / 20) * 20;
     ClickY = Math.floor(ClickY / 20) * 20;
     if (ClickX < 300 && ClickY <= 300 && ClickX >= 0 && ClickY >= 0) {
+        if (EraserOn == false) {
         Art2.fillRect(ClickX, ClickY, 20, 20);
+        }else if (EraserOn == true) {
+        Art2.clearRect(ClickX, ClickY, 20, 20);
+        }
     }
     };
     }
@@ -674,8 +694,7 @@
     document.getElementById("Profile").style.display = "flex";
         const Art = document.getElementById('DrawProfile');
         const Art2 = Art.getContext('2d');
-        Art2.fillStyle = "white";
-        Art2.fillRect(0, 0, 300, 300);
+        Art2.clearRect(0, 0, 300, 300);
     }
     window.SaveArt = async function() {
     const Art = document.getElementById('DrawProfile');
@@ -749,12 +768,16 @@ window.FlipVertically = async function() {
     }
     }
 }
-window.DrawSqaure = async function() {
-    const Art = document.getElementById('DrawProfile');
-    const Art2 = Art.getContext('2d'); 
-    Art2.fillStyle = document.getElementById("ArtColor").value;
-    Art2.fillRect(80, 80, 140, 140);
-}
+    window.Eraser = async function() {
+    if (EraserOn == false) {
+        EraserOn = true
+        document.getElementById('EraserOnCheck').innerText = "ON";
+     
+    }else if (EraserOn == true) { 
+        EraserOn = false
+        document.getElementById('EraserOnCheck').innerText = "OFF"
+    }
+    }
 /*
     window.SaveSlot1 = async function() {
     const Art = document.getElementById('DrawProfile');
@@ -909,6 +932,7 @@ userFound = true;
 if (userFound == false) {
 CustomEmojis.push(ArtImage + "|" + savedName)
 }
+alert("Image Set As Custom Emoji")
 window.DrawPost();
 await SaveToCloud();
 }
