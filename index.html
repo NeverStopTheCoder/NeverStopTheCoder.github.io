@@ -778,6 +778,12 @@ window.FlipVertically = async function() {
         document.getElementById('EraserOnCheck').innerText = "OFF"
     }
     }
+window.DrawSqaure = async function() {
+    const Art = document.getElementById('DrawProfile');
+    const Art2 = Art.getContext('2d'); 
+    Art2.fillStyle = document.getElementById("ArtColor").value;
+    Art2.fillRect(80, 80, 140, 140);
+}
 /*
     window.SaveSlot1 = async function() {
     const Art = document.getElementById('DrawProfile');
