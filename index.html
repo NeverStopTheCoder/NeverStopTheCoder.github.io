@@ -686,6 +686,11 @@ background-position: 2px 2px, 2px 12px, 12px -8px, -8px 2px;">
         }
     }
     };
+    Art.onmousedown = (event) => {
+        if (event.button === 1) {
+        window.Eraser()
+        }
+    };
     }
     window.CloseEditor = async function() {
     document.getElementById("Profile").style.display = "none";
